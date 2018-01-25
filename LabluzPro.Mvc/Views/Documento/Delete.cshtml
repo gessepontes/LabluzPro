@@ -1,0 +1,50 @@
+﻿@model LabluzPro.Domain.Entities.Documento
+
+@{
+    ViewData["Title"] = "Delete";
+}
+
+<h2>Delete</h2>
+
+<h3>Are you sure you want to delete this?</h3>
+<div>
+    <h4>Documento</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.ID)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.ID)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.dVencimento)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.dVencimento)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.sImagem)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.sImagem)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.sNome)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.sNome)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.IdTipo)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.IdTipo)
+        </dd>
+    </dl>
+    
+    <form asp-action="Delete">
+        <input type="submit" value="Delete" class="btn btn-default" /> |
+        <a asp-action="Index">Back to List</a>
+    </form>
+</div>

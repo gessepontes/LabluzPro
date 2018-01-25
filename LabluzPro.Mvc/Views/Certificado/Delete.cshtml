@@ -1,0 +1,52 @@
+﻿@model LabluzPro.Domain.Entities.Certificado
+
+@{
+    ViewData["Title"] = "Delete";
+}
+
+<div class="right_col" role="main">
+
+    <div class="x_panel">
+        <div class="clearfix"></div>
+        <div class="row">
+            <h3>Você tem certeza que deseja excluir este registro?</h3>
+            <hr />
+            <dl class="dl-horizontal">
+                <dt>
+                    @Html.DisplayNameFor(model => model.sNome)
+                </dt>
+                <dd>
+                    @Html.DisplayFor(model => model.sNome)
+                </dd>
+                <dt>
+                    @Html.DisplayNameFor(model => model.dVencimento)
+                </dt>
+                <dd>                    
+                    @Html.ValueFor(model => model.dVencimento, "{0:dd/MM/yyyy}")
+                </dd>
+                <dt>
+                    @Html.DisplayNameFor(model => model.dServico)
+                </dt>
+                <dd>
+                    @Html.ValueFor(model => model.dServico, "{0:dd/MM/yyyy}")
+                </dd>
+                <dt>
+                    @Html.DisplayNameFor(model => model.IdTipo)
+                </dt>
+                <dd>
+                    @Html.DisplayFor(model => model.Tipo.sNome)
+                </dd>
+            </dl>
+
+            <form asp-action="Delete">
+                <div class="ln_solid"></div>
+                <div class="form-group">
+                    <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
+                        <button class="btn btn-primary" type="submit" asp-action="Index">Voltar</button>
+                        <button type="submit" class="btn btn-danger">Excluir</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,59 @@
+﻿@model IEnumerable<LabluzPro.Domain.Entities.Documento>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h2>Index</h2>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.ID)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.dVencimento)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.sImagem)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.sNome)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.IdTipo)
+                </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.ID)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.dVencimento)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.sImagem)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.sNome)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.IdTipo)
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
+                @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
+                @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
