@@ -1,4 +1,4 @@
-﻿@model LabluzPro.Domain.Entities.Documento
+﻿@model LabluzPro.Domain.Entities.Usuario
 
 @{
     ViewData["Title"] = "Delete";
@@ -19,22 +19,22 @@
                     @Html.DisplayFor(model => model.sNome)
                 </dd>
                 <dt>
-                    @Html.DisplayNameFor(model => model.sNumero)
+                    @Html.DisplayNameFor(model => model.sEmail)
                 </dt>
                 <dd>
-                    @Html.DisplayFor(model => model.sNumero)
+                    @Html.DisplayFor(model => model.sEmail)
                 </dd>
                 <dt>
-                    @Html.DisplayNameFor(model => model.dVencimento)
+                    @Html.DisplayNameFor(model => model.sTelefone)
                 </dt>
                 <dd>
-                    @Html.ValueFor(model => model.dVencimento, "{0:dd/MM/yyyy}")
+                    @Html.DisplayFor(model => model.sTelefone)
                 </dd>
                 <dt>
-                    @Html.DisplayNameFor(model => model.IdTipo)
+                    @Html.DisplayNameFor(model => model.bAtivo)
                 </dt>
                 <dd>
-                    @Html.DisplayFor(model => model.Tipo.sNome)
+                    @Html.DisplayFor(model => model.bAtivo)
                 </dd>
             </dl>
 

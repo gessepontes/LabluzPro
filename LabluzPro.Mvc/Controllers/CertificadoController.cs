@@ -45,6 +45,7 @@ namespace LabluzPro.Mvc.Controllers
                 return RedirectToAction(nameof(Index));
             }
 
+            ViewBag.ListaTipo = _tipoRepository.GetAllTipoDrop(3);
             return View(_certificado);
         }
 
@@ -94,6 +95,8 @@ namespace LabluzPro.Mvc.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
+
+            ViewBag.ListaTipo = _tipoRepository.GetAllTipoDrop(3);
             return View(_certificado);
         }
 

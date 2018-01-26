@@ -13,14 +13,17 @@ namespace LabluzPro.Domain.Entities
         public int ID { get; set; }
 
         [Required(ErrorMessage = "{0} é um campo obrigatório.")]
-        [Display(Name = "Vencimento")]
+        [DataType(DataType.Date)]
+        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
+        [Display(Name = "Data do vencimento")]
         public DateTime dVencimento { get; set; }
 
         [Display(Name = "Imagem")]
         public string sImagem { get; set; }
 
-        [Required(ErrorMessage = "{0} é um campo obrigatório.")]
         string Nome;
+
+        [Required(ErrorMessage = "{0} é um campo obrigatório.")]
         [Display(Name = "Documento")]
         public string sNome
         {
@@ -45,5 +48,12 @@ namespace LabluzPro.Domain.Entities
 
         public int iCodUsuarioMovimentacao { get; set; }
         public DateTime dCadastro { get; set; }
+
+        [Required(ErrorMessage = "{0} é um campo obrigatório.")]
+        [Display(Name = "Número")]
+        public string sNumero { get; set; }
+
+        public virtual Tipo Tipo { get; set; }
+
     }
 }

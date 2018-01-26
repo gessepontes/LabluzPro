@@ -11,10 +11,12 @@ namespace LabluzPro.Mvc.Controllers
     public class ContratoController : Controller
     {
         private readonly IContratoRepository _contratoRepository;
+        private readonly ITipoRepository _tipoRepository;
 
-        public ContratoController(IContratoRepository contratoRepository)
+        public ContratoController(IContratoRepository contratoRepository, ITipoRepository tipoRepository)
         {
             _contratoRepository = contratoRepository;
+            _tipoRepository = tipoRepository;
         }
 
         public IActionResult Index() =>
@@ -22,20 +24,28 @@ namespace LabluzPro.Mvc.Controllers
 
         public IActionResult Create()
         {
+            ViewBag.ListaTipo = _tipoRepository.GetAllTipoDrop(2);
             return View();
         }
 
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create([Bind("iNumero,sNome,dVencimento,sImagem,idTipo,IdTipoEquipamento,IdTipoServico")] Contrato _contrato, IFormFile IMAGEM)
+        public IActionResult Create([Bind("sNumero,sNome,dVencimento,sImagem,IdTipo,IdTipoEquipamento,IdTipoServico")] Contrato _contrato, IFormFile sImagem)
         {
             if (ModelState.IsValid)
             {
+                if (sImagem != null)
+                {
+                    _contrato.sImagem = DateTime.Now.ToString("yyyyMMddHHmmss") + ".jpg";
+                    Diverso.SaveImage(sImagem, "DOCUMENTO", _contrato.sImagem);
+                }
+
                 _contratoRepository.Add(_contrato);
                 return RedirectToAction(nameof(Index));
             }
 
+            ViewBag.ListaTipo = _tipoRepository.GetAllTipoDrop(2);
             return View(_contrato);
         }
 
@@ -49,12 +59,13 @@ namespace LabluzPro.Mvc.Controllers
             if (_contrato == null)
                 return NotFound();
 
+            ViewBag.ListaTipo = _tipoRepository.GetAllTipoDrop(2);
             return View(_contrato);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit(int id, [Bind("ID,iNumero,sNome,dVencimento,sImagem,idTipo,IdTipoEquipamento,IdTipoServico")]  Contrato _contrato, IFormFile IMAGEM)
+        public IActionResult Edit(int id, [Bind("ID,sNumero,sNome,dVencimento,sImagem,IdTipo,IdTipoEquipamento,IdTipoServico")]  Contrato _contrato, IFormFile sImagem)
         {
             if (id != _contrato.ID)
                 return NotFound();
@@ -63,10 +74,10 @@ namespace LabluzPro.Mvc.Controllers
             {
                 try
                 {
-                    if (IMAGEM != null)
+                    if (sImagem != null)
                     {
                         _contrato.sImagem = DateTime.Now.ToString("yyyyMMddHHmmss") + ".jpg";
-                        Diverso.SaveImage(IMAGEM, "DOCUMENTO", _contrato.sImagem);
+                        Diverso.SaveImage(sImagem, "DOCUMENTO", _contrato.sImagem);
                     }
 
                     _contratoRepository.Update(_contrato);
@@ -83,6 +94,8 @@ namespace LabluzPro.Mvc.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
+
+            ViewBag.ListaTipo = _tipoRepository.GetAllTipoDrop(2);
             return View(_contrato);
         }
 

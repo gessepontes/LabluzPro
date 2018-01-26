@@ -19,9 +19,15 @@
                     @Html.DisplayFor(model => model.sNome)
                 </dd>
                 <dt>
+                    @Html.DisplayNameFor(model => model.sNumero)
+                </dt>
+                <dd>
+                    @Html.DisplayFor(model => model.sNumero)
+                </dd>
+                <dt>
                     @Html.DisplayNameFor(model => model.dVencimento)
                 </dt>
-                <dd>                    
+                <dd>
                     @Html.ValueFor(model => model.dVencimento, "{0:dd/MM/yyyy}")
                 </dd>
                 <dt>

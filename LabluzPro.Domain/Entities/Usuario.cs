@@ -7,14 +7,21 @@ namespace LabluzPro.Domain.Entities
 {
     public class Usuario
     {
+
+        public Usuario()
+        {
+            dCadastro = DateTime.Now;
+        }
+
         public int ID { get; set; }
 
-        [Display(Name = "Imagem")]
+        [Display(Name = "Foto")]
         public string sImagem { get; set; }
 
-        [Required(ErrorMessage = "{0} é um campo obrigatório.")]
         string Nome;
-        [Display(Name = "Certificado")]
+
+        [Required(ErrorMessage = "{0} é um campo obrigatório.")]
+        [Display(Name = "Usuário")]
         public string sNome
         {
             get
@@ -58,13 +65,33 @@ namespace LabluzPro.Domain.Entities
         [EmailAddress(ErrorMessage = "Email inválido.")]
         public string sEmail { get; set; }
 
+        [Display(Name = "Telefone")]
+        [Required(ErrorMessage = "{0} é um campo obrigatório.")]
+        [StringLength(15)]
+        public string sTelefone { get; set; }
+
         [Display(Name = "Ativo")]
         public bool bAtivo { get; set; }
 
         public DateTime dCadastro { get; set; }
         public int iCodUsuarioMovimentacao { get; set; }
 
-        public virtual ICollection<UsuarioPagina> UsuarioPerfil { get; set; }
+        [Display(Name = "Páginas")]
+        public virtual ICollection<UsuarioPagina> UsuarioPagina { get; set; }
+        public List<Paginas> PaginaSelecionado { get; set; }
+    }
 
+    public enum Paginas : int
+    {
+        [Display(Name = "Responsável")]
+        Responsavel = 0,
+        [Display(Name = "Usuário")]
+        Usuario = 1,
+        [Display(Name = "Certificado")]
+        Certificado = 2,
+        [Display(Name = "Contrato")]
+        Contrato = 3,
+        [Display(Name = "Documentos")]
+        Documentos = 4
     }
 }

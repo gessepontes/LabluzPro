@@ -55,7 +55,7 @@ namespace LabluzPro.Mvc
             {
                 routes.MapRoute(
                     name: "default",
-                    template: "{controller=Certificado}/{action=Index}/{id?}");
+                    template: "{controller=Login}/{action=Index}/{id?}");
             });
         }
     }

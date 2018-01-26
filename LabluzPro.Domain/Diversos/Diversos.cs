@@ -39,6 +39,9 @@ namespace LabluzPro.Domain.Diversos
                 case "DOCUMENTO":
                     path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\images\\documento", sFoto);
                     break;
+                case "USUARIO":
+                    path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\images\\usuario", sFoto);
+                    break;
             }
 
             if (foto == null || foto.Length == 0) { }

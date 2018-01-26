@@ -26,7 +26,6 @@ namespace LabluzPro.Data.Repositories.Common
                     c.AddMap(new CertificadoMap());
                     c.AddMap(new TipoMap());
                     c.AddMap(new UsuarioMap());
-
                     c.ForDommel();
                 });
             }

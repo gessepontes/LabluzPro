@@ -4,59 +4,49 @@
     ViewData["Title"] = "Delete";
 }
 
-<h2>Delete</h2>
+<div class="right_col" role="main">
 
-<h3>Are you sure you want to delete this?</h3>
-<div>
-    <h4>Contrato</h4>
-    <hr />
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.ID)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.ID)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.dVencimento)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.dVencimento)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.sImagem)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.sImagem)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.sNome)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.sNome)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.IdTipo)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.IdTipo)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.IdTipoEquipamento)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.IdTipoEquipamento)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.IdTipoServico)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.IdTipoServico)
-        </dd>
-    </dl>
-    
-    <form asp-action="Delete">
-        <input type="submit" value="Delete" class="btn btn-default" /> |
-        <a asp-action="Index">Back to List</a>
-    </form>
+    <div class="x_panel">
+        <div class="clearfix"></div>
+        <div class="row">
+            <h3>Você tem certeza que deseja excluir este registro?</h3>
+            <hr />
+            <dl class="dl-horizontal">
+                <dt>
+                    @Html.DisplayNameFor(model => model.sNome)
+                </dt>
+                <dd>
+                    @Html.DisplayFor(model => model.sNome)
+                </dd>
+                <dt>
+                    @Html.DisplayNameFor(model => model.sNumero)
+                </dt>
+                <dd>
+                    @Html.DisplayFor(model => model.sNumero)
+                </dd>
+                <dt>
+                    @Html.DisplayNameFor(model => model.dVencimento)
+                </dt>
+                <dd>
+                    @Html.ValueFor(model => model.dVencimento, "{0:dd/MM/yyyy}")
+                </dd>
+                <dt>
+                    @Html.DisplayNameFor(model => model.IdTipo)
+                </dt>
+                <dd>
+                    @Html.DisplayFor(model => model.Tipo.sNome)
+                </dd>
+            </dl>
+
+            <form asp-action="Delete">
+                <div class="ln_solid"></div>
+                <div class="form-group">
+                    <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
+                        <button class="btn btn-primary" type="submit" asp-action="Index">Voltar</button>
+                        <button type="submit" class="btn btn-danger">Excluir</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
 </div>

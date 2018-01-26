@@ -1,8 +1,10 @@
-﻿@model LabluzPro.Domain.Entities.Certificado
+﻿@model LabluzPro.Domain.Entities.Usuario
+@using LabluzPro.Domain.Diversos
+@using LabluzPro.Domain.Entities
 
 
 @{
-    ViewData["Title"] = "Novo Certificado";
+    ViewData["Title"] = "Novo Usuário";
 }
 
 <div class="right_col" role="main">
@@ -12,7 +14,7 @@
             <div class="col-md-12 col-sm-12 col-xs-12">
                 <div class="x_panel">
                     <div class="x_title">
-                        <h2>Novo Certificado</h2>
+                        <h2>Novo Usuário</h2>
                         <div class="clearfix"></div>
                     </div>
                     <div class="x_content">
@@ -31,40 +33,36 @@
                             </div>
 
                             <div class="form-group">
-                                <label asp-for="sNumero" class="control-label col-md-3 col-sm-3 col-xs-12"></label>
-                                <div class="col-md-2 col-sm-6 col-xs-12">
-                                    <input asp-for="sNumero" class="form-control col-md-7 col-xs-12" />
-                                </div>
-                                <span asp-validation-for="sNumero" class="text-danger"></span>
-                            </div>
-
-                            <div class="form-group">
-                                <label asp-for="dVencimento" class="control-label col-md-3 col-sm-3 col-xs-12"></label>
-                                <div class="col-md-2 col-sm-6 col-xs-12">
-                                    <input asp-for="dVencimento" class="form-control col-md-7 col-xs-12" />
-                                </div>
-                                <span asp-validation-for="dVencimento" class="text-danger"></span>
-                            </div>
-
-                            <div class="form-group">
-                                <label asp-for="dServico" class="control-label col-md-3 col-sm-3 col-xs-12"></label>
-                                <div class="col-md-2 col-sm-6 col-xs-12">
-                                    <input asp-for="dServico" class="form-control col-md-7 col-xs-12" />
-                                </div>
-
-                                <span asp-validation-for="dServico" class="text-danger"></span>
-                            </div>
-
-                            <div class="form-group">
-                                <label asp-for="IdTipo" class="control-label col-md-3 col-sm-3 col-xs-12"></label>
+                                <label asp-for="sEmail" class="control-label col-md-3 col-sm-3 col-xs-12"></label>
                                 <div class="col-md-5 col-sm-6 col-xs-12">
-                                    <select asp-for="IdTipo"
-                                            class="form-control" asp-items="@(new SelectList(@ViewBag.ListaTipo,"ID", "sNome"))">
-                                        <option value="">Selecione o tipo</option>
-                                    </select>
+                                    <input asp-for="sEmail" class="form-control col-md-7 col-xs-12" />
+                                </div>
+                                <span asp-validation-for="sEmail" class="text-danger"></span>
+                            </div>
+
+                            <div class="form-group">
+                                <label asp-for="sTelefone" class="control-label col-md-3 col-sm-3 col-xs-12"></label>
+                                <div class="col-md-2 col-sm-6 col-xs-12">
+                                    <input asp-for="sTelefone" class="form-control col-md-7 col-xs-12" data-inputmask="'mask' : '(99) 99999-9999'" />
                                 </div>
 
-                                <span asp-validation-for="IdTipo" class="text-danger"></span>
+                                <span asp-validation-for="sTelefone" class="text-danger"></span>
+                            </div>
+
+                            <div class="form-group">
+                                <label asp-for="sSenha" class="control-label col-md-3 col-sm-3 col-xs-12"></label>
+                                <div class="col-md-2 col-sm-6 col-xs-12">
+                                    <input asp-for="sSenha" type="password" class="form-control col-md-7 col-xs-12" />
+                                </div>
+
+                                <span asp-validation-for="sSenha" class="text-danger"></span>
+                            </div>
+
+                            <div class="form-group">
+                                <label asp-for="bAtivo" class="control-label col-md-3 col-sm-3 col-xs-12"></label>
+                                <div class="col-md-1 col-sm-6 col-xs-12">
+                                    <input asp-for="bAtivo" type="checkbox" class="col-md-7 col-xs-12" />
+                                </div>
                             </div>
 
                             <div class="form-group">
@@ -77,10 +75,29 @@
                             </div>
 
 
+                            <div class="form-group">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12">Páginas</label>
+
+                                <div class="col-md-3 col-sm-6 col-xs-12">
+                                    @foreach (Paginas item in Enum.GetValues(typeof(Paginas)))
+                                    {
+                                        var nomePerfil = EnumHelper<Paginas>.GetDisplayValue(item);
+
+                                        <div>
+                                            <label>
+                                                <input type="checkbox"
+                                                       name="PaginaSelecionado"
+                                                       value="@item" /> @nomePerfil
+                                                </label>
+                                            </div>
+                                        }
+                                </div>
+                            </div>
+
                             <div class="ln_solid"></div>
                             <div class="form-group">
                                 <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
-                                    <button class="btn btn-primary" type="button" onclick="location.href='@Url.Action("Index", "Certificado")'">Voltar</button>
+                                    <button class="btn btn-primary" type="button" onclick="location.href='@Url.Action("Index", "Usuario")'">Voltar</button>
                                     <button type="submit" class="btn btn-success">Salvar</button>
                                 </div>
                             </div>

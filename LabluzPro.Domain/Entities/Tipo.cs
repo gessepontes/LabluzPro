@@ -35,5 +35,12 @@ namespace LabluzPro.Domain.Entities
         [Display(Name = "Certificado")]
         public virtual ICollection<Certificado> Certificado { get; set; }
 
+        [Display(Name = "Documento")]
+        public virtual ICollection<Documento> Documento { get; set; }
+
+        [Display(Name = "Contrato")]
+        public virtual ICollection<Contrato> Contrato { get; set; }
+
+
     }
 }
