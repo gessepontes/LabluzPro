@@ -53,9 +53,9 @@ namespace LabluzPro.Data.Repositories
             string parametros = "";
 
             if (obj.sSenha != null) parametros = ",sSenha=@sSenha";
-            if (obj.sImagem != "") parametros = parametros + ",sImagem=@sImagem";
+            if (obj.sImagem != null) parametros = parametros + ",sImagem=@sImagem";
 
-            sql = "UPDATE Usuario SET sNome=@sNome,sEmail=@sEmail,bAtivo=@bAtivo,sTelefone=@sTelefone,iCodUsuarioMovimentacao=@iCodUsuarioMovimentacao,dCadastro=@dCadastro " + parametros + " WHERE ID = @ID; ";
+            sql = "UPDATE Usuario SET sNome=@sNome,sTelefone=@sTelefone,iCodUsuarioMovimentacao=@iCodUsuarioMovimentacao,dCadastro=@dCadastro " + parametros + " WHERE ID = @ID; ";
 
             conn.Execute(sql, new { obj.sNome, obj.sEmail, obj.sSenha, obj.bAtivo, obj.sImagem, obj.iCodUsuarioMovimentacao, obj.dCadastro, obj.sTelefone, obj.ID });
         }

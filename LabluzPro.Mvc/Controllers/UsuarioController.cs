@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using System;
 using LabluzPro.Domain.Diversos;
 using Vereyon.Web;
+using Microsoft.Extensions.Configuration;
 
 namespace LabluzPro.Mvc.Controllers
 {
@@ -13,9 +14,11 @@ namespace LabluzPro.Mvc.Controllers
     {
         private readonly IUsuarioRepository _usuarioRepository;
         private readonly IFlashMessage _flashMessage;
+        private readonly IConfiguration _configuration;
 
-        public UsuarioController(IUsuarioRepository usuarioRepository, IFlashMessage flashMessage)
+        public UsuarioController(IUsuarioRepository usuarioRepository, IFlashMessage flashMessage, IConfiguration configuration)
         {
+            _configuration = configuration;
             _usuarioRepository = usuarioRepository;
             _flashMessage = flashMessage;
         }
@@ -55,6 +58,26 @@ namespace LabluzPro.Mvc.Controllers
 
                 return RedirectToAction(nameof(Index));
             }
+
+            return View(_usuario);
+        }
+
+        public IActionResult EditUser()
+        {
+            string id = HttpContext.Session.GetString("ID");
+
+            var _usuario = _usuarioRepository.GetByIdUsuarioPerfil(Convert.ToInt16(id));
+            if (_usuario == null)
+                return NotFound();
+
+            if (_usuario.sImagem != null)
+            {
+                _usuario.sImagem = _configuration.GetSection("AppConfiguration")["ResourcesPath:Usuario"] + _usuario.sImagem;
+            }
+            else {
+                _usuario.sImagem = _configuration.GetSection("AppConfiguration")["ResourcesPath:Usuario"] + "user.png";
+            }
+            
 
             return View(_usuario);
         }
@@ -109,6 +132,45 @@ namespace LabluzPro.Mvc.Controllers
 
             return View(_usuario);
         }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult EditUser(int id, [Bind("ID,sNome,sSenha,sEmail,sTelefone")]  Usuario _usuario, IFormFile sImagem)
+        {
+            if (id != _usuario.ID)
+                return NotFound();
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    if (sImagem != null)
+                    {
+                        _usuario.sImagem = DateTime.Now.ToString("yyyyMMddHHmmss") + ".jpg";
+                        Diverso.SaveImage(sImagem, "USUARIO", _usuario.sImagem);
+                    }
+
+                    _usuario.iCodUsuarioMovimentacao = Convert.ToInt16(HttpContext.Session.GetString("ID"));
+                    _usuarioRepository.UpdateUser(_usuario);
+                    _flashMessage.Confirmation("Operação realizada com sucesso!");
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    _flashMessage.Danger("Errro ao realizar a operação!");
+
+                    if (!UsuarioExists(_usuario.ID))
+                        return NotFound();
+                    else
+                    {
+                        throw;
+                    }
+                }
+                return RedirectToAction(nameof(EditUser));
+            }
+
+            return View(_usuario);
+        }
+
 
 
         public IActionResult Delete(int? id)

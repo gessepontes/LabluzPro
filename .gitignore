@@ -259,3 +259,8 @@ paket-files/
 # Python Tools for Visual Studio (PTVS)
 __pycache__/
 *.pyc
+/LabluzPro.Mvc/wwwroot/images/usuario/20180127202848.jpg
+/LabluzPro.Mvc/wwwroot/images/usuario/20180127202128.jpg
+/LabluzPro.Mvc/wwwroot/images/usuario/20180127201919.jpg
+/LabluzPro.Mvc/wwwroot/images/usuario/20180127201837.jpg
+/LabluzPro.Mvc/wwwroot/images/usuario/20180127201745.jpg

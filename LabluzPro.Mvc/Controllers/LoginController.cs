@@ -32,6 +32,7 @@ namespace LabluzPro.Mvc.Controllers
             {
                 if (_usuario.bAtivo)
                 {
+                    HttpContext.Session.SetString("sNome", _usuario.sNome);
                     HttpContext.Session.SetString("ID", _usuario.ID.ToString());
                     return RedirectToAction(nameof(Index), "Home");
                 }
