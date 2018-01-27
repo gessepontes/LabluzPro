@@ -24,4 +24,11 @@
     <ProjectReference Include="..\LabluzPro.Ioc\LabluzPro.Ioc.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\images\certificado\" />
+    <Folder Include="wwwroot\images\contrato\" />
+    <Folder Include="wwwroot\images\documento\" />
+    <Folder Include="wwwroot\images\usuario\" />
+  </ItemGroup>
+
 </Project>

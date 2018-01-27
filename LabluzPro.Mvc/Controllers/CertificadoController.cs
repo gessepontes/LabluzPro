@@ -5,6 +5,9 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Http;
 using System;
 using LabluzPro.Domain.Diversos;
+using Vereyon.Web;
+using System.Threading.Tasks;
+using System.IO;
 
 namespace LabluzPro.Mvc.Controllers
 {
@@ -12,11 +15,13 @@ namespace LabluzPro.Mvc.Controllers
     {
         private readonly ICertificadoRepository _certificadoRepository;
         private readonly ITipoRepository _tipoRepository;
+        private readonly IFlashMessage _flashMessage;
 
-        public CertificadoController(ICertificadoRepository certificadoRepository, ITipoRepository tipoRepository)
+        public CertificadoController(ICertificadoRepository certificadoRepository, ITipoRepository tipoRepository, IFlashMessage flashMessage)
         {
             _certificadoRepository = certificadoRepository;
             _tipoRepository = tipoRepository;
+            _flashMessage = flashMessage;
         }
 
         public IActionResult Index() =>
@@ -35,13 +40,24 @@ namespace LabluzPro.Mvc.Controllers
         {
             if (ModelState.IsValid)
             {
-                if (sImagem != null)
+                try
                 {
-                    _certificado.sImagem = DateTime.Now.ToString("yyyyMMddHHmmss") + ".jpg";
-                    Diverso.SaveImage(sImagem, "CERTIFICADO", _certificado.sImagem);
+                    if (sImagem != null)
+                    {
+                        _certificado.sImagem = DateTime.Now.ToString("yyyyMMddHHmmss") + ".jpg";
+                        Diverso.SaveImage(sImagem, "CERTIFICADO", _certificado.sImagem);
+                    }
+
+                    _certificado.iCodUsuarioMovimentacao = Convert.ToInt16(HttpContext.Session.GetString("ID"));
+                    _certificadoRepository.Add(_certificado);
+                    _flashMessage.Confirmation("Operação realizada com sucesso!");
+                }
+                catch (Exception)
+                {
+                    _flashMessage.Danger("Erro ao realizar a operação!");
+                    throw;
                 }
 
-                _certificadoRepository.Add(_certificado);
                 return RedirectToAction(nameof(Index));
             }
 
@@ -81,11 +97,14 @@ namespace LabluzPro.Mvc.Controllers
                         Diverso.SaveImage(sImagem, "CERTIFICADO", _certificado.sImagem);
                     }
 
+                    _certificado.iCodUsuarioMovimentacao = Convert.ToInt16(HttpContext.Session.GetString("ID"));
                     _certificadoRepository.Update(_certificado);
-
+                    _flashMessage.Confirmation("Operação realizada com sucesso!");
                 }
                 catch (DbUpdateConcurrencyException)
                 {
+                    _flashMessage.Danger("Erro ao realizar a operação!");
+
                     if (!CertificadoExists(_certificado.ID))
                         return NotFound();
                     else
@@ -119,8 +138,17 @@ namespace LabluzPro.Mvc.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult DeleteConfirmed(int id)
         {
-            var _certificado = _certificadoRepository.GetById(id);
-            _certificadoRepository.Remove(_certificado);
+            try
+            {
+                var _certificado = _certificadoRepository.GetById(id);
+                _certificadoRepository.Remove(_certificado);
+                _flashMessage.Confirmation("Operação realizada com sucesso!");
+            }
+            catch (Exception)
+            {
+                _flashMessage.Danger("Erro ao realizar a operação!");
+                throw;
+            }
 
             return RedirectToAction(nameof(Index));
         }
@@ -128,6 +156,27 @@ namespace LabluzPro.Mvc.Controllers
         private bool CertificadoExists(int id) =>
             _certificadoRepository.GetById(id) != null;
 
+
+        public async Task<IActionResult> Download(string sImagem)
+        {
+            if (sImagem == null)
+            {
+                _flashMessage.Warning("Arquivo não encontrado!");
+                return RedirectToAction(nameof(Index));
+            }
+
+            string path = Diverso.Download(sImagem, "CERTIFICADO");
+
+            var memory = new MemoryStream();
+            using (var stream = new FileStream(path, FileMode.Open))
+            {
+                await stream.CopyToAsync(memory);
+            }
+            memory.Position = 0;
+
+
+            return File(memory, Diverso.GetContentType(path), Path.GetFileName(path));
+        }
 
     }
 }

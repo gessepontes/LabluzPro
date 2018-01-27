@@ -5,6 +5,9 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Http;
 using System;
 using LabluzPro.Domain.Diversos;
+using Vereyon.Web;
+using System.Threading.Tasks;
+using System.IO;
 
 namespace LabluzPro.Mvc.Controllers
 {
@@ -12,11 +15,14 @@ namespace LabluzPro.Mvc.Controllers
     {
         private readonly IContratoRepository _contratoRepository;
         private readonly ITipoRepository _tipoRepository;
+        private readonly IFlashMessage _flashMessage;
 
-        public ContratoController(IContratoRepository contratoRepository, ITipoRepository tipoRepository)
+        public ContratoController(IContratoRepository contratoRepository, ITipoRepository tipoRepository , IFlashMessage flashMessage)
         {
             _contratoRepository = contratoRepository;
             _tipoRepository = tipoRepository;
+            _flashMessage = flashMessage;
+
         }
 
         public IActionResult Index() =>
@@ -35,13 +41,25 @@ namespace LabluzPro.Mvc.Controllers
         {
             if (ModelState.IsValid)
             {
-                if (sImagem != null)
+                try
                 {
-                    _contrato.sImagem = DateTime.Now.ToString("yyyyMMddHHmmss") + ".jpg";
-                    Diverso.SaveImage(sImagem, "DOCUMENTO", _contrato.sImagem);
+                    if (sImagem != null)
+                    {
+                        _contrato.sImagem = DateTime.Now.ToString("yyyyMMddHHmmss") + ".jpg";
+                        Diverso.SaveImage(sImagem, "CONTRATO", _contrato.sImagem);
+                    }
+
+                    _contrato.iCodUsuarioMovimentacao = Convert.ToInt16(HttpContext.Session.GetString("ID"));
+                    _contratoRepository.Add(_contrato);
+                    _flashMessage.Confirmation("Operação realizada com sucesso!");
+
+                }
+                catch (Exception)
+                {
+                    _flashMessage.Danger("Erro ao realizar a operação!");
+                    throw;
                 }
 
-                _contratoRepository.Add(_contrato);
                 return RedirectToAction(nameof(Index));
             }
 
@@ -77,14 +95,18 @@ namespace LabluzPro.Mvc.Controllers
                     if (sImagem != null)
                     {
                         _contrato.sImagem = DateTime.Now.ToString("yyyyMMddHHmmss") + ".jpg";
-                        Diverso.SaveImage(sImagem, "DOCUMENTO", _contrato.sImagem);
+                        Diverso.SaveImage(sImagem, "CONTRATO", _contrato.sImagem);
                     }
 
+                    _contrato.iCodUsuarioMovimentacao = Convert.ToInt16(HttpContext.Session.GetString("ID"));
                     _contratoRepository.Update(_contrato);
+                    _flashMessage.Confirmation("Operação realizada com sucesso!");
 
                 }
                 catch (DbUpdateConcurrencyException)
                 {
+                    _flashMessage.Danger("Erro ao realizar a operação!");
+
                     if (!ContratoExists(_contrato.ID))
                         return NotFound();
                     else
@@ -118,8 +140,18 @@ namespace LabluzPro.Mvc.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult DeleteConfirmed(int id)
         {
-            var _documento = _contratoRepository.GetById(id);
-            _contratoRepository.Remove(_documento);
+            try
+            {
+                var _documento = _contratoRepository.GetById(id);
+                _contratoRepository.Remove(_documento);
+                _flashMessage.Confirmation("Operação realizada com sucesso!");
+
+            }
+            catch (Exception)
+            {
+                _flashMessage.Danger("Erro ao realizar a operação!");
+                throw;
+            }
 
             return RedirectToAction(nameof(Index));
         }
@@ -127,6 +159,25 @@ namespace LabluzPro.Mvc.Controllers
         private bool ContratoExists(int id) =>
             _contratoRepository.GetById(id) != null;
 
+        public async Task<IActionResult> Download(string sImagem)
+        {
+            if (sImagem == null)
+            {
+                _flashMessage.Warning("Arquivo não encontrado!");
+                return RedirectToAction(nameof(Index));
+            }
 
+            string path = Diverso.Download(sImagem, "CONTRATO");
+
+            var memory = new MemoryStream();
+            using (var stream = new FileStream(path, FileMode.Open))
+            {
+                await stream.CopyToAsync(memory);
+            }
+            memory.Position = 0;
+
+
+            return File(memory, Diverso.GetContentType(path), Path.GetFileName(path));
+        }
     }
 }

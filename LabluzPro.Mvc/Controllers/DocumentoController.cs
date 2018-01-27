@@ -5,6 +5,9 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Http;
 using System;
 using LabluzPro.Domain.Diversos;
+using Vereyon.Web;
+using System.Threading.Tasks;
+using System.IO;
 
 namespace LabluzPro.Mvc.Controllers
 {
@@ -12,11 +15,13 @@ namespace LabluzPro.Mvc.Controllers
     {
         private readonly IDocumentoRepository _documentoRepository;
         private readonly ITipoRepository _tipoRepository;
+        private readonly IFlashMessage _flashMessage;
 
-        public DocumentoController(IDocumentoRepository documentoRepository, ITipoRepository tipoRepository)
+        public DocumentoController(IDocumentoRepository documentoRepository, ITipoRepository tipoRepository, IFlashMessage flashMessage)
         {
             _documentoRepository = documentoRepository;
             _tipoRepository = tipoRepository;
+            _flashMessage = flashMessage;
         }
 
         public IActionResult Index() =>
@@ -35,13 +40,25 @@ namespace LabluzPro.Mvc.Controllers
         {
             if (ModelState.IsValid)
             {
-                if (sImagem != null)
+                try
                 {
-                    _documento.sImagem = DateTime.Now.ToString("yyyyMMddHHmmss") + ".jpg";
-                    Diverso.SaveImage(sImagem, "DOCUMENTO", _documento.sImagem);
+                    if (sImagem != null)
+                    {
+                        _documento.sImagem = DateTime.Now.ToString("yyyyMMddHHmmss") + ".jpg";
+                        Diverso.SaveImage(sImagem, "DOCUMENTO", _documento.sImagem);
+                    }
+
+                    _documento.iCodUsuarioMovimentacao = Convert.ToInt16(HttpContext.Session.GetString("ID"));
+                    _documentoRepository.Add(_documento);
+                    _flashMessage.Confirmation("Operação realizada com sucesso!");
+
+                }
+                catch (Exception)
+                {
+                    _flashMessage.Danger("Erro ao realizar a operação!");
+                    throw;
                 }
 
-                _documentoRepository.Add(_documento);
                 return RedirectToAction(nameof(Index));
             }
 
@@ -80,11 +97,14 @@ namespace LabluzPro.Mvc.Controllers
                         Diverso.SaveImage(sImagem, "DOCUMENTO", _documento.sImagem);
                     }
 
+                    _documento.iCodUsuarioMovimentacao = Convert.ToInt16(HttpContext.Session.GetString("ID"));
                     _documentoRepository.Update(_documento);
-
+                    _flashMessage.Confirmation("Operação realizada com sucesso!");
                 }
                 catch (DbUpdateConcurrencyException)
                 {
+                    _flashMessage.Danger("Erro ao realizar a operação!");
+
                     if (!DocumentoExists(_documento.ID))
                         return NotFound();
                     else
@@ -118,8 +138,18 @@ namespace LabluzPro.Mvc.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult DeleteConfirmed(int id)
         {
-            var _documento = _documentoRepository.GetById(id);
-            _documentoRepository.Remove(_documento);
+            try
+            {
+                var _documento = _documentoRepository.GetById(id);
+                _documentoRepository.Remove(_documento);
+                _flashMessage.Confirmation("Operação realizada com sucesso!");
+
+            }
+            catch (Exception)
+            {
+                _flashMessage.Danger("Erro ao realizar a operação!");
+                throw;
+            }
 
             return RedirectToAction(nameof(Index));
         }
@@ -127,6 +157,24 @@ namespace LabluzPro.Mvc.Controllers
         private bool DocumentoExists(int id) =>
             _documentoRepository.GetById(id) != null;
 
+        public async Task<IActionResult> Download(string sImagem)
+        {
+            if (sImagem == null) {
+                _flashMessage.Warning("Arquivo não encontrado!");
+                return RedirectToAction(nameof(Index));
+            }
 
+            string path = Diverso.Download(sImagem, "DOCUMENTO");
+
+            var memory = new MemoryStream();
+            using (var stream = new FileStream(path, FileMode.Open))
+            {
+                await stream.CopyToAsync(memory);
+            }
+            memory.Position = 0;
+
+
+            return File(memory, Diverso.GetContentType(path), Path.GetFileName(path));
+        }
     }
 }

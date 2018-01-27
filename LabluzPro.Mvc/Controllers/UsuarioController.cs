@@ -5,16 +5,19 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Http;
 using System;
 using LabluzPro.Domain.Diversos;
+using Vereyon.Web;
 
 namespace LabluzPro.Mvc.Controllers
 {
     public class UsuarioController : Controller
     {
         private readonly IUsuarioRepository _usuarioRepository;
+        private readonly IFlashMessage _flashMessage;
 
-        public UsuarioController(IUsuarioRepository usuarioRepository)
+        public UsuarioController(IUsuarioRepository usuarioRepository, IFlashMessage flashMessage)
         {
             _usuarioRepository = usuarioRepository;
+            _flashMessage = flashMessage;
         }
 
         public IActionResult Index() =>
@@ -32,13 +35,24 @@ namespace LabluzPro.Mvc.Controllers
         {
             if (ModelState.IsValid)
             {
-                if (sImagem != null)
+                try
                 {
-                    _usuario.sImagem = DateTime.Now.ToString("yyyyMMddHHmmss") + ".jpg";
-                    Diverso.SaveImage(sImagem, "USUARIO", _usuario.sImagem);
+                    if (sImagem != null)
+                    {
+                        _usuario.sImagem = DateTime.Now.ToString("yyyyMMddHHmmss") + ".jpg";
+                        Diverso.SaveImage(sImagem, "USUARIO", _usuario.sImagem);
+                    }
+
+                    _usuario.iCodUsuarioMovimentacao = Convert.ToInt16(HttpContext.Session.GetString("ID"));
+                    _usuarioRepository.Add(_usuario);
+                    _flashMessage.Confirmation("Operação realizada com sucesso!");
+                }
+                catch (Exception)
+                {
+                    _flashMessage.Danger("Erro ao realizar a operação!");
+                    throw;
                 }
 
-                _usuarioRepository.Add(_usuario);
                 return RedirectToAction(nameof(Index));
             }
 
@@ -75,11 +89,14 @@ namespace LabluzPro.Mvc.Controllers
                         Diverso.SaveImage(sImagem, "USUARIO", _usuario.sImagem);
                     }
 
+                    _usuario.iCodUsuarioMovimentacao = Convert.ToInt16(HttpContext.Session.GetString("ID"));
                     _usuarioRepository.Update(_usuario);
-
+                    _flashMessage.Confirmation("Operação realizada com sucesso!");
                 }
                 catch (DbUpdateConcurrencyException)
                 {
+                    _flashMessage.Danger("Errro ao realizar a operação!");
+
                     if (!UsuarioExists(_usuario.ID))
                         return NotFound();
                     else
@@ -112,8 +129,20 @@ namespace LabluzPro.Mvc.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult DeleteConfirmed(int id)
         {
-            var _usuario = _usuarioRepository.GetById(id);
-            _usuarioRepository.Remove(_usuario);
+
+            try
+            {
+                var _usuario = _usuarioRepository.GetById(id);
+                _usuarioRepository.Remove(_usuario);
+
+                _flashMessage.Confirmation("Operação realizada com sucesso!");
+
+            }
+            catch (Exception)
+            {
+                _flashMessage.Danger("Erro ao realizar a operação!");
+                throw;
+            }
 
             return RedirectToAction(nameof(Index));
         }

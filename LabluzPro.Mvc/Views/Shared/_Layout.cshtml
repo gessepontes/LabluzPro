@@ -28,7 +28,7 @@
     <!-- jQuery -->
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
 
-    <title>@ViewData["Title"] - LabLuzPro</title>
+    <title>@ViewData["Title"] - LabLuz</title>
 </head>
 <body class="nav-md">
     <div class="container body">
@@ -36,7 +36,7 @@
             <div class="col-md-3 left_col">
                 <div class="left_col scroll-view">
                     <div class="navbar nav_title" style="border: 0;">
-                        <a href="index.html" class="site_title"><i class="fa fa-paw"></i> <span>LabLuzPro</span></a>
+                        <a href="index.html" class="site_title"><i class="fa fa-paw"></i> <span>LabLuz</span></a>
                     </div>
                     <div class="clearfix"></div>
                     <!-- menu profile quick info -->
@@ -57,7 +57,7 @@
                             <h3>Menu</h3>
                             <ul class="nav side-menu">
                                 <li>
-                                    <a href="@Url.Action("Index", "Usuario")"><i class="fa fa-user-circle-o"></i>Usuário</a>
+                                    <a href="@Url.Action("Index", "Usuario")"><i class="fa fa-user-circle-o"></i>Responsável</a>
                                 </li>
                                 <li>
                                     <a><i class="fa fa-edit"></i> Cadastro <span class="fa fa-chevron-down"></span></a>
@@ -84,7 +84,7 @@
                         </div>
                         <ul class="nav navbar-nav navbar-right">
                             <li class="">
-                                <a data-toggle="tooltip" data-placement="top" class="" title="Logout" href="login.html">
+                                <a asp-action="Index" asp-controller="Login" data-toggle="tooltip" data-placement="top" class="" title="Logout">
                                     <span class="glyphicon glyphicon-off" aria-hidden="true"></span>  Sair
                                 </a>
                             </li>
@@ -95,9 +95,6 @@
             <!-- /top navigation -->
             <!-- page content -->
             @RenderBody()
-            <div class="col-md-10 col-sm-6 col-xs-12 col-md-offset-2">
-                @Vereyon.Web.FlashMessageHtmlHelper.RenderFlashMessages(Html)
-            </div>
 
             <!-- /page content -->
             <!-- footer content -->

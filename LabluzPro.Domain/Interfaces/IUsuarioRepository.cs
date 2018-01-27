@@ -7,6 +7,6 @@ namespace LabluzPro.Domain.Interfaces
     {
         void UpdateUser(Usuario obj);
         Usuario GetByIdUsuarioPerfil(int? id);
-        bool Login(Usuario obj);
+        Usuario Login(Usuario obj);
     }
 }

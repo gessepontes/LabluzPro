@@ -15,7 +15,7 @@ namespace LabluzPro.Data.Repositories
 
             if (obj.sImagem == "") obj.sImagem = "user.png";
 
-            var returnId = conn.Query<int>(sql, new { obj.sNome, obj.sEmail, obj.sSenha, obj.bAtivo, obj.sImagem,obj.sTelefone, obj.iCodUsuarioMovimentacao, obj.dCadastro }).SingleOrDefault();
+            var returnId = conn.Query<int>(sql, new { obj.sNome, obj.sEmail, obj.sSenha, obj.bAtivo, obj.sImagem, obj.sTelefone, obj.iCodUsuarioMovimentacao, obj.dCadastro }).SingleOrDefault();
 
             if (returnId != 0 && obj.PaginaSelecionado.Count > 0)
             {
@@ -37,7 +37,7 @@ namespace LabluzPro.Data.Repositories
 
             sql = "UPDATE Usuario SET sNome=@sNome,sEmail=@sEmail,bAtivo=@bAtivo,sTelefone=@sTelefone,iCodUsuarioMovimentacao=@iCodUsuarioMovimentacao,dCadastro=@dCadastro " + parametros + " WHERE ID = @ID; ";
 
-            conn.Execute(sql, new { obj.sNome, obj.sEmail, obj.sSenha, obj.bAtivo, obj.sImagem, obj.iCodUsuarioMovimentacao, obj.dCadastro,obj.sTelefone, obj.ID });
+            conn.Execute(sql, new { obj.sNome, obj.sEmail, obj.sSenha, obj.bAtivo, obj.sImagem, obj.iCodUsuarioMovimentacao, obj.dCadastro, obj.sTelefone, obj.ID });
 
             conn.Execute("DELETE FROM UsuarioPagina WHERE idUsuario = @ID; ", new { obj.ID });
 
@@ -67,18 +67,6 @@ namespace LabluzPro.Data.Repositories
             return p;
         }
 
-        public bool Login(Usuario obj) {
-            Usuario _usuario = conn.Query<Usuario>("SELECT * FROM Usuario WHERE sEmail =@sEmail AND sSenha = @sSenha AND bAtivo=1", new { obj.sEmail, obj.sSenha }).FirstOrDefault();
-
-            if (_usuario != null)
-            {
-                return (_usuario.sEmail ?? "") == obj.sEmail ? true : false;
-            }
-            else {
-                return false;
-            }
-
-            
-        } 
+        public Usuario Login(Usuario obj) => conn.Query<Usuario>("SELECT * FROM Usuario WHERE sEmail =@sEmail AND sSenha = @sSenha ", new { obj.sEmail, obj.sSenha }).FirstOrDefault();
     }
 }

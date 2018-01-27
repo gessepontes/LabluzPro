@@ -55,6 +55,56 @@ namespace LabluzPro.Domain.Diversos
             }
         }
 
+        public static string Download(string sFoto, string origem)
+        {
+            string path = "";
+
+            switch (origem)
+            {
+                case "CERTIFICADO":
+                    path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\images\\certificado", sFoto);
+                    break;
+                case "CONTRATO":
+                    path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\images\\contrato", sFoto);
+                    break;
+                case "DOCUMENTO":
+                    path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\images\\documento", sFoto);
+                    break;
+                case "USUARIO":
+                    path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\images\\usuario", sFoto);
+                    break;
+            }
+
+
+            return path;
+        }
+
+
+        public static string GetContentType(string path)
+        {
+            var types = GetMimeTypes();
+            var ext = Path.GetExtension(path).ToLowerInvariant();
+            return types[ext];
+        }
+
+        private static Dictionary<string, string> GetMimeTypes()
+        {
+            return new Dictionary<string, string>
+            {
+                {".txt", "text/plain"},
+                {".pdf", "application/pdf"},
+                {".doc", "application/vnd.ms-word"},
+                {".docx", "application/vnd.ms-word"},
+                {".xls", "application/vnd.ms-excel"},
+                {".xlsx", "application/vnd.openxmlformats officedocument.spreadsheetml.sheet"},
+                {".png", "image/png"},
+                {".jpg", "image/jpeg"},
+                {".jpeg", "image/jpeg"},
+                {".gif", "image/gif"},
+                {".csv", "text/csv"}
+            };
+        }
+
         // o metodo isCPFCNPJ recebe dois parâmetros:
         // uma string contendo o cpf ou cnpj a ser validado
         // e um valor do tipo boolean, indicando se o método irá

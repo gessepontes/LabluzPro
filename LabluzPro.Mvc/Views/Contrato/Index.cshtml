@@ -5,6 +5,9 @@
 }
 
 <div class="right_col" role="main">
+    <div class="col-md-12 col-sm-12 col-xs-12">
+        @Vereyon.Web.FlashMessageHtmlHelper.RenderFlashMessages(Html)
+    </div>
 
     <div class="col-md-12 col-sm-12 col-xs-12">
         <div class="x_panel">
@@ -20,31 +23,37 @@
                             <th>@Html.DisplayNameFor(model => model.sNumero)</th>
                             <th>@Html.DisplayNameFor(model => model.IdTipo)</th>
                             <th>@Html.DisplayNameFor(model => model.dVencimento)</th>
-                            <th></th>
+                            <th width="5%"></th>
                         </tr>
                     </thead>
 
                     <tbody>
                         @foreach (var item in Model)
                         {
-                        <tr>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.sNome)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.sNumero)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.Tipo.sNome)
-                            </td>
-                            <td>
-                                @Html.ValueFor(modelItem => item.dVencimento, "{0:dd/MM/yyyy}")
-                            </td>
-                            <td>
-                                <a href="@Url.Action("Edit", "Documento" , new { id = item.ID })"><i class="fa fa-pencil-square-o fa-lg" aria-hidden="true"></i></a> |
-                                <a href="@Url.Action("Delete", "Documento" , new { id = item.ID })"><i class="fa fa-trash fa-lg" aria-hidden="true"></i></a>
-                            </td>
-                        </tr>
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.sNome)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.sNumero)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Tipo.sNome)
+                                </td>
+                                <td>
+                                    @Html.ValueFor(modelItem => item.dVencimento, "{0:dd/MM/yyyy}")
+                                </td>
+                                <td>
+                                    <a href="@Url.Action("Edit", "Contrato" , new { id = item.ID })"><i class="fa fa-pencil-square-o fa-lg" aria-hidden="true"></i></a>
+                                    <a href="@Url.Action("Delete", "Contrato" , new { id = item.ID })"><i class="fa fa-trash fa-lg" aria-hidden="true"></i></a>
+
+                                    @if (item.sImagem != null)
+                                    {
+                                        <a href="@Url.Action("Download", "Contrato" , new { item.sImagem })"><i class="fa fa-download  fa-lg" aria-hidden="true"></i></a>
+                                    }
+
+                                </td>
+                            </tr>
                         }
                     </tbody>
                 </table>
