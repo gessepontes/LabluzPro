@@ -92,6 +92,6 @@ namespace LabluzPro.Domain.Entities
         [Display(Name = "Contrato")]
         Contrato = 4,
         [Display(Name = "Documentos")]
-        Documentos = 5
+        Documento = 5
     }
 }

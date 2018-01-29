@@ -49,7 +49,7 @@
                             <div class="form-group">
                                 <label asp-for="IdTipo" class="control-label col-md-3 col-sm-3 col-xs-12"></label>
                                 <div class="col-md-5 col-sm-6 col-xs-12">
-                                    <select asp-for="IdTipo"
+                                    <select asp-for="IdTipo" onchange="HabilitaDiv();"
                                             class="form-control" asp-items="@(new SelectList(@ViewBag.ListaTipo,"ID", "sNome"))">
                                         <option value="">Selecione o tipo</option>
                                     </select>
@@ -58,28 +58,32 @@
                                 <span asp-validation-for="IdTipo" class="text-danger"></span>
                             </div>
 
-                            <div class="form-group">
-                                <label asp-for="IdTipo" class="control-label col-md-3 col-sm-3 col-xs-12"></label>
-                                <div class="col-md-5 col-sm-6 col-xs-12">
-                                    <select asp-for="IdTipo"
-                                            class="form-control" asp-items="@(new SelectList(@ViewBag.ListaTipo,"ID", "sNome"))">
-                                        <option value="">Selecione o tipo de Serviço</option>
-                                    </select>
-                                </div>
+                            <div id="divSevico">
+                                <div class="form-group">
+                                    <label asp-for="IdTipoServico" class="control-label col-md-3 col-sm-3 col-xs-12"></label>
+                                    <div class="col-md-5 col-sm-6 col-xs-12">
+                                        <select asp-for="IdTipoServico"
+                                                class="form-control" asp-items="@(new SelectList(@ViewBag.ListaTipoServico,"ID", "sNome"))">
+                                            <option value="">Selecione o tipo de Serviço</option>
+                                        </select>
+                                    </div>
 
-                                <span asp-validation-for="IdTipo" class="text-danger"></span>
+                                    <span asp-validation-for="IdTipoServico" class="text-danger"></span>
+                                </div>
                             </div>
 
-                            <div class="form-group">
-                                <label asp-for="IdTipo" class="control-label col-md-3 col-sm-3 col-xs-12"></label>
-                                <div class="col-md-5 col-sm-6 col-xs-12">
-                                    <select asp-for="IdTipo"
-                                            class="form-control" asp-items="@(new SelectList(@ViewBag.ListaTipo,"ID", "sNome"))">
-                                        <option value="">Selecione o tipo equipamentos</option>
-                                    </select>
-                                </div>
+                            <div id="divEquipamento">
+                                <div class="form-group">
+                                    <label asp-for="IdTipoEquipamento" class="control-label col-md-3 col-sm-3 col-xs-12"></label>
+                                    <div class="col-md-5 col-sm-6 col-xs-12">
+                                        <select asp-for="IdTipoEquipamento"
+                                                class="form-control" asp-items="@(new SelectList(@ViewBag.ListaTipoEquipamento,"ID", "sNome"))">
+                                            <option value="">Selecione o tipo equipamentos</option>
+                                        </select>
+                                    </div>
 
-                                <span asp-validation-for="IdTipo" class="text-danger"></span>
+                                    <span asp-validation-for="IdTipoEquipamento" class="text-danger"></span>
+                                </div>
                             </div>
 
                             <div class="form-group">
@@ -110,4 +114,37 @@
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    <script type="text/javascript">
+
+        $(function () {
+            document.getElementById('divSevico').style.display = 'none';
+            document.getElementById('divEquipamento').style.display = 'none';
+        });
+
+        function HabilitaDiv() {
+            var IdTipo = document.getElementById('IdTipo').value;
+
+            if (IdTipo != "") {
+                if (IdTipo == "7") {
+                    document.getElementById('divSevico').style.display = 'block';
+                    document.getElementById('divEquipamento').style.display = 'none';
+                }
+                if (IdTipo == "6") {
+                    document.getElementById('divEquipamento').style.display = 'block';
+                    document.getElementById('divSevico').style.display = 'none';
+                }
+                if (IdTipo == "5") {
+                    document.getElementById('divSevico').style.display = 'none';
+                    document.getElementById('divEquipamento').style.display = 'none';
+                }
+            }
+            else {
+                document.getElementById('divSevico').style.display = 'none';
+                document.getElementById('divEquipamento').style.display = 'none';
+            }
+        }
+
+    </script>
 }
+

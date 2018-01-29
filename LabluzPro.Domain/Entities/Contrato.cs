@@ -49,10 +49,10 @@ namespace LabluzPro.Domain.Entities
         public int IdTipo { get; set; }
 
         [Display(Name = "Tipo de equipamento")]
-        public int IdTipoEquipamento { get; set; }
+        public int ? IdTipoEquipamento { get; set; }
 
         [Display(Name = "Tipo de serviço")]
-        public int IdTipoServico { get; set; }
+        public int ? IdTipoServico { get; set; }
 
         public int iCodUsuarioMovimentacao { get; set; }
         public DateTime dCadastro { get; set; }

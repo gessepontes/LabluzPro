@@ -24,11 +24,24 @@ namespace LabluzPro.Mvc.Controllers
             _flashMessage = flashMessage;
         }
 
-        public IActionResult Index() =>
-            View(_usuarioRepository.GetAll());
+        public IActionResult Index() {
+            
+            if (!HttpContext.Session.GetComplexData<Usuario>("UserData").PaginaSelecionado.Contains(Paginas.Usuario))
+            {
+                return RedirectToAction("DeniedAccess", "Login");
+            }
+
+            return View(_usuarioRepository.GetAll());
+        }
+            
 
         public IActionResult Create()
         {
+            if (!HttpContext.Session.GetComplexData<Usuario>("UserData").PaginaSelecionado.Contains(Paginas.Usuario))
+            {
+                return RedirectToAction("DeniedAccess", "Login");
+            }
+
             return View();
         }
 
@@ -64,7 +77,12 @@ namespace LabluzPro.Mvc.Controllers
         }
 
         public IActionResult EditUser()
-        {           
+        {
+            if (!HttpContext.Session.GetComplexData<Usuario>("UserData").PaginaSelecionado.Contains(Paginas.Responsavel))
+            {
+                return RedirectToAction("DeniedAccess", "Login");
+            }
+
             var _usuario = _usuarioRepository.GetByIdUsuarioPerfil(HttpContext.Session.GetComplexData<Usuario>("UserData").ID);
             if (_usuario == null)
                 return NotFound();
@@ -84,6 +102,11 @@ namespace LabluzPro.Mvc.Controllers
 
         public IActionResult Edit(int? id)
         {
+            if (!HttpContext.Session.GetComplexData<Usuario>("UserData").PaginaSelecionado.Contains(Paginas.Usuario))
+            {
+                return RedirectToAction("DeniedAccess", "Login");
+            }
+
             if (id == null)
                 return NotFound();
 
@@ -174,6 +197,11 @@ namespace LabluzPro.Mvc.Controllers
 
         public IActionResult Delete(int? id)
         {
+            if (!HttpContext.Session.GetComplexData<Usuario>("UserData").PaginaSelecionado.Contains(Paginas.Usuario))
+            {
+                return RedirectToAction("DeniedAccess", "Login");
+            }
+
             //Delete
             if (id == null)
                 return NotFound();

@@ -1,0 +1,43 @@
+\ieducar\intranet\educar_relatorio_certificado.php
+\ieducar\intranet\educar_aluno_aprovado_externo.php
+\ieducar\intranet\lista_inscrito.php
+\ieducar\intranet\relatorio_inscricao_etiqueta.php
+\ieducar\intranet\impressao_etiqueta.php
+
+\ieducar\intranet\busca_participantes.php
+\ieducar\intranet\lista_participantes.php
+\ieducar\intranet\lista_participantesexcel.php
+\ieducar\intranet\educar_modelo_frequencia_diversos.php
+\ieducar\intranet\resultadoFrequencia.php
+\ieducar\intranet\enviar_emails_aprovados.php
+\ieducar\intranet\mansagemEmail.php
+
+\ieducar\mudancas\reserva_evento_cad.php
+\ieducar\mudancas\vagas_diversos_insert.php
+\ieducar\intranet\include\pmieducar\clsPmieducarReservaVaga.inc
+\ieducar\intranet\include\pmieducar\clsPmieducarMatricula.inc.php
+
+criar pasta ieducar\intranet\arquivos\email
+add imagem logo_esmp.jpg
+
+
+add coluna idcargo na tabela pmieducar.reserva_vaga
+criar uma tabela cargo no esquema public
+
+\ieducar\intranet\js\funcao.js
+\ieducar\intranet\frequencia.php
+\ieducar\intranet\educar_relatorio_certificado_.php
+\ieducar\intranet\atendidos_cad.php
+\ieducar\intranet\resultadoFrequencia.php
+\ieducar\intranet\lista_frequencia.php
+\ieducar\intranet\lista_inscrito.php
+Preciso da permissão de escrita na pasta email
+
+\ieducar\intranet\lista_inscrito.php
+\ieducar\mudancas\vagas_diversos_insert.php	
+\ieducar\mudancas\reserva_evento_cad.php
+
+
+Add -> \ieducar\intranet\vagas_diversos_insert.php	
+\ieducar\mudancas\reserva_evento_cad.php
+\ieducar\intranet\include\pmieducar\clsPmieducarMatricula.inc.php

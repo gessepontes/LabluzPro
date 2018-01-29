@@ -9,6 +9,7 @@ using Vereyon.Web;
 using System.Threading.Tasks;
 using System.IO;
 using LabluzPro.Mvc.Models;
+using System.Linq;
 
 namespace LabluzPro.Mvc.Controllers
 {
@@ -25,11 +26,23 @@ namespace LabluzPro.Mvc.Controllers
             _flashMessage = flashMessage;
         }
 
-        public IActionResult Index() =>
-            View(_documentoRepository.GetAll());
+        public IActionResult Index() {
+            if (!HttpContext.Session.GetComplexData<Usuario>("UserData").PaginaSelecionado.Contains(Paginas.Documento))
+            {
+                return RedirectToAction("DeniedAccess", "Login");
+            }
+
+            return View(_documentoRepository.GetAll());
+
+        }
 
         public IActionResult Create()
         {
+            if (!HttpContext.Session.GetComplexData<Usuario>("UserData").PaginaSelecionado.Contains(Paginas.Documento))
+            {
+                return RedirectToAction("DeniedAccess", "Login");
+            }
+
             ViewBag.ListaTipo = _tipoRepository.GetAllTipoDrop(1);
             return View();
         }
@@ -45,7 +58,9 @@ namespace LabluzPro.Mvc.Controllers
                 {
                     if (sImagem != null)
                     {
-                        _documento.sImagem = DateTime.Now.ToString("yyyyMMddHHmmss") + ".jpg";
+                        string[] aFoto = sImagem.FileName.Split('.');
+
+                        _documento.sImagem = DateTime.Now.ToString("yyyyMMddHHmmss") + "." + aFoto[aFoto.Count() - 1];
                         Diverso.SaveImage(sImagem, "DOCUMENTO", _documento.sImagem);
                     }
 
@@ -70,6 +85,11 @@ namespace LabluzPro.Mvc.Controllers
 
         public IActionResult Edit(int? id)
         {
+            if (!HttpContext.Session.GetComplexData<Usuario>("UserData").PaginaSelecionado.Contains(Paginas.Documento))
+            {
+                return RedirectToAction("DeniedAccess", "Login");
+            }
+
             if (id == null)
                 return NotFound();
 
@@ -94,7 +114,9 @@ namespace LabluzPro.Mvc.Controllers
                 {
                     if (sImagem != null)
                     {
-                        _documento.sImagem = DateTime.Now.ToString("yyyyMMddHHmmss") + ".jpg";
+                        string[] aFoto = sImagem.FileName.Split('.');
+
+                        _documento.sImagem = DateTime.Now.ToString("yyyyMMddHHmmss") + "." + aFoto[aFoto.Count() - 1];
                         Diverso.SaveImage(sImagem, "DOCUMENTO", _documento.sImagem);
                     }
 
@@ -123,6 +145,11 @@ namespace LabluzPro.Mvc.Controllers
 
         public IActionResult Delete(int? id)
         {
+            if (!HttpContext.Session.GetComplexData<Usuario>("UserData").PaginaSelecionado.Contains(Paginas.Documento))
+            {
+                return RedirectToAction("DeniedAccess", "Login");
+            }
+
             //Delete
             if (id == null)
                 return NotFound();
@@ -160,7 +187,8 @@ namespace LabluzPro.Mvc.Controllers
 
         public async Task<IActionResult> Download(string sImagem)
         {
-            if (sImagem == null) {
+            if (sImagem == null)
+            {
                 _flashMessage.Warning("Arquivo não encontrado!");
                 return RedirectToAction(nameof(Index));
             }

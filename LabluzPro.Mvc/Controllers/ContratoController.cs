@@ -9,6 +9,7 @@ using Vereyon.Web;
 using System.Threading.Tasks;
 using System.IO;
 using LabluzPro.Mvc.Models;
+using System.Linq;
 
 namespace LabluzPro.Mvc.Controllers
 {
@@ -26,12 +27,26 @@ namespace LabluzPro.Mvc.Controllers
 
         }
 
-        public IActionResult Index() =>
-            View(_contratoRepository.GetAll());
+        public IActionResult Index() {
+            if (!HttpContext.Session.GetComplexData<Usuario>("UserData").PaginaSelecionado.Contains(Paginas.Contrato))
+            {
+                return RedirectToAction("DeniedAccess", "Login");
+            }
+
+            return View(_contratoRepository.GetAll());
+        }
+            
 
         public IActionResult Create()
         {
+            if (!HttpContext.Session.GetComplexData<Usuario>("UserData").PaginaSelecionado.Contains(Paginas.Contrato))
+            {
+                return RedirectToAction("DeniedAccess", "Login");
+            }
+
             ViewBag.ListaTipo = _tipoRepository.GetAllTipoDrop(2);
+            ViewBag.ListaTipoServico = _tipoRepository.GetAllTipoDrop(4);
+            ViewBag.ListaTipoEquipamento = _tipoRepository.GetAllTipoDrop(5);
             return View();
         }
 
@@ -46,7 +61,9 @@ namespace LabluzPro.Mvc.Controllers
                 {
                     if (sImagem != null)
                     {
-                        _contrato.sImagem = DateTime.Now.ToString("yyyyMMddHHmmss") + ".jpg";
+                        string[] aFoto = sImagem.FileName.Split('.');
+
+                        _contrato.sImagem = DateTime.Now.ToString("yyyyMMddHHmmss") + "." + aFoto[aFoto.Count() - 1];
                         Diverso.SaveImage(sImagem, "CONTRATO", _contrato.sImagem);
                     }
 
@@ -65,12 +82,19 @@ namespace LabluzPro.Mvc.Controllers
             }
 
             ViewBag.ListaTipo = _tipoRepository.GetAllTipoDrop(2);
+            ViewBag.ListaTipoServico = _tipoRepository.GetAllTipoDrop(4);
+            ViewBag.ListaTipoEquipamento = _tipoRepository.GetAllTipoDrop(5);
             return View(_contrato);
         }
 
 
         public IActionResult Edit(int? id)
         {
+            if (!HttpContext.Session.GetComplexData<Usuario>("UserData").PaginaSelecionado.Contains(Paginas.Contrato))
+            {
+                return RedirectToAction("DeniedAccess", "Login");
+            }
+
             if (id == null)
                 return NotFound();
 
@@ -79,6 +103,8 @@ namespace LabluzPro.Mvc.Controllers
                 return NotFound();
 
             ViewBag.ListaTipo = _tipoRepository.GetAllTipoDrop(2);
+            ViewBag.ListaTipoServico = _tipoRepository.GetAllTipoDrop(4);
+            ViewBag.ListaTipoEquipamento = _tipoRepository.GetAllTipoDrop(5);
             return View(_contrato);
         }
 
@@ -95,7 +121,9 @@ namespace LabluzPro.Mvc.Controllers
                 {
                     if (sImagem != null)
                     {
-                        _contrato.sImagem = DateTime.Now.ToString("yyyyMMddHHmmss") + ".jpg";
+                        string[] aFoto = sImagem.FileName.Split('.');
+
+                        _contrato.sImagem = DateTime.Now.ToString("yyyyMMddHHmmss") + "." + aFoto[aFoto.Count() - 1];
                         Diverso.SaveImage(sImagem, "CONTRATO", _contrato.sImagem);
                     }
 
@@ -119,12 +147,19 @@ namespace LabluzPro.Mvc.Controllers
             }
 
             ViewBag.ListaTipo = _tipoRepository.GetAllTipoDrop(2);
+            ViewBag.ListaTipoServico = _tipoRepository.GetAllTipoDrop(4);
+            ViewBag.ListaTipoEquipamento = _tipoRepository.GetAllTipoDrop(5);
             return View(_contrato);
         }
 
 
         public IActionResult Delete(int? id)
         {
+            if (!HttpContext.Session.GetComplexData<Usuario>("UserData").PaginaSelecionado.Contains(Paginas.Contrato))
+            {
+                return RedirectToAction("DeniedAccess", "Login");
+            }
+
             //Delete
             if (id == null)
                 return NotFound();

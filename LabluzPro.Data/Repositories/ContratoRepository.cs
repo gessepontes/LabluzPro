@@ -27,5 +27,18 @@ namespace LabluzPro.Data.Repositories
                 return contrato;
             },
             param: new { id }).FirstOrDefault();
+
+        public override void Update(Contrato obj)
+        {
+            string sql = "";
+            string parametros = "";
+
+            if (obj.sImagem != null) parametros = parametros + ",sImagem=@sImagem";
+
+            sql = "UPDATE Contrato SET sNumero = @sNumero,sNome = @sNome,dVencimento = @dVencimento,IdTipo =@IdTipo,IdTipoEquipamento = @IdTipoEquipamento,IdTipoServico = @IdTipoServico,iCodUsuarioMovimentacao=@iCodUsuarioMovimentacao,dCadastro=@dCadastro " + parametros + " WHERE ID = @ID; ";
+
+            conn.Execute(sql, new { obj.sNumero, obj.sNome, obj.dVencimento, obj.IdTipoEquipamento, obj.IdTipoServico, obj.sImagem, obj.IdTipo, obj.iCodUsuarioMovimentacao, obj.dCadastro, obj.ID });
+
+        }
     }
 }

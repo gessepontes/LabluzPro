@@ -73,7 +73,7 @@ namespace LabluzPro.Data.Repositories
             Usuario p = conn.Query<Usuario>("SELECT TOP(1) * FROM Usuario WHERE sEmail =@sEmail AND sSenha = @sSenha ", new { obj.sEmail, obj.sSenha }).FirstOrDefault();
 
             if (p != null) {
-                p.UsuarioPagina = conn.Query<UsuarioPagina>("SELECT * FROM dbo.UsuarioPagina WHERE idUsuario = " + p.ID).ToList();
+                p.PaginaSelecionado = conn.Query<Paginas>("SELECT idPagina FROM dbo.UsuarioPagina WHERE idUsuario = " + p.ID).ToList();
             }
             
             return p;

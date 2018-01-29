@@ -25,10 +25,13 @@ namespace LabluzPro.Mvc.Controllers
 
         public IActionResult Logout()
         {
-            HttpContext.Session.SetString("sNome", "");
-            HttpContext.Session.SetString("ID", "");
-
+            HttpContext.Session.SetComplexData("UserData", new Usuario());
             return RedirectToAction(nameof(Index));
+        }
+
+        public IActionResult DeniedAccess()
+        {
+            return View();
         }
 
         [HttpPost]
@@ -41,6 +44,11 @@ namespace LabluzPro.Mvc.Controllers
             {
                 if (_usuario.bAtivo)
                 {
+                    if (_usuario.sImagem == null)
+                    {
+                        _usuario.sImagem = "user.png";
+                    }
+
                     HttpContext.Session.SetComplexData("UserData", _usuario);
 
                     return RedirectToAction(nameof(Index), "Home");

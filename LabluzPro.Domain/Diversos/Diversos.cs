@@ -47,6 +47,7 @@ namespace LabluzPro.Domain.Diversos
             if (foto == null || foto.Length == 0) { }
             else
             {
+
                 using (var stream = new FileStream(path, FileMode.Create))
                 {
                     await foto.CopyToAsync(stream);

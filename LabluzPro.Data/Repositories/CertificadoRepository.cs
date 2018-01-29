@@ -28,5 +28,18 @@ namespace LabluzPro.Data.Repositories
                     return certificado;
                 },
                 param: new { id }).FirstOrDefault();
+
+        public override void Update(Certificado obj)
+        {
+            string sql = "";
+            string parametros = "";
+
+            if (obj.sImagem != null) parametros = parametros + ",sImagem=@sImagem";
+
+            sql = "UPDATE Certificado SET sNumero = @sNumero,sNome = @sNome,dVencimento = @dVencimento,dServico = @dServico,IdTipo =@IdTipo,iCodUsuarioMovimentacao=@iCodUsuarioMovimentacao,dCadastro=@dCadastro " + parametros + " WHERE ID = @ID; ";
+
+            conn.Execute(sql, new { obj.sNumero, obj.sNome, obj.dVencimento, obj.dServico, obj.sImagem,obj.IdTipo, obj.iCodUsuarioMovimentacao, obj.dCadastro, obj.ID });
+
+        }
     }
 }
