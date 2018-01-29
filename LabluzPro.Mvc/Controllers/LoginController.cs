@@ -1,5 +1,6 @@
 ﻿using LabluzPro.Domain.Entities;
 using LabluzPro.Domain.Interfaces;
+using LabluzPro.Mvc.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Vereyon.Web;
@@ -22,6 +23,14 @@ namespace LabluzPro.Mvc.Controllers
             return View();
         }
 
+        public IActionResult Logout()
+        {
+            HttpContext.Session.SetString("sNome", "");
+            HttpContext.Session.SetString("ID", "");
+
+            return RedirectToAction(nameof(Index));
+        }
+
         [HttpPost]
         public IActionResult Login([Bind("sEmail,sSenha")] Usuario _usuario)
         {
@@ -32,8 +41,8 @@ namespace LabluzPro.Mvc.Controllers
             {
                 if (_usuario.bAtivo)
                 {
-                    HttpContext.Session.SetString("sNome", _usuario.sNome);
-                    HttpContext.Session.SetString("ID", _usuario.ID.ToString());
+                    HttpContext.Session.SetComplexData("UserData", _usuario);
+
                     return RedirectToAction(nameof(Index), "Home");
                 }
                 else

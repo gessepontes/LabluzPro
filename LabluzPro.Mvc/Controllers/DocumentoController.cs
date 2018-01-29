@@ -8,6 +8,7 @@ using LabluzPro.Domain.Diversos;
 using Vereyon.Web;
 using System.Threading.Tasks;
 using System.IO;
+using LabluzPro.Mvc.Models;
 
 namespace LabluzPro.Mvc.Controllers
 {
@@ -48,7 +49,7 @@ namespace LabluzPro.Mvc.Controllers
                         Diverso.SaveImage(sImagem, "DOCUMENTO", _documento.sImagem);
                     }
 
-                    _documento.iCodUsuarioMovimentacao = Convert.ToInt16(HttpContext.Session.GetString("ID"));
+                    _documento.iCodUsuarioMovimentacao = HttpContext.Session.GetComplexData<Usuario>("UserData").ID;
                     _documentoRepository.Add(_documento);
                     _flashMessage.Confirmation("Operação realizada com sucesso!");
 
@@ -97,7 +98,7 @@ namespace LabluzPro.Mvc.Controllers
                         Diverso.SaveImage(sImagem, "DOCUMENTO", _documento.sImagem);
                     }
 
-                    _documento.iCodUsuarioMovimentacao = Convert.ToInt16(HttpContext.Session.GetString("ID"));
+                    _documento.iCodUsuarioMovimentacao = HttpContext.Session.GetComplexData<Usuario>("UserData").ID;
                     _documentoRepository.Update(_documento);
                     _flashMessage.Confirmation("Operação realizada com sucesso!");
                 }

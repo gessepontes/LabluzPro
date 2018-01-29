@@ -7,6 +7,7 @@ using System;
 using LabluzPro.Domain.Diversos;
 using Vereyon.Web;
 using Microsoft.Extensions.Configuration;
+using LabluzPro.Mvc.Models;
 
 namespace LabluzPro.Mvc.Controllers
 {
@@ -46,7 +47,7 @@ namespace LabluzPro.Mvc.Controllers
                         Diverso.SaveImage(sImagem, "USUARIO", _usuario.sImagem);
                     }
 
-                    _usuario.iCodUsuarioMovimentacao = Convert.ToInt16(HttpContext.Session.GetString("ID"));
+                    _usuario.iCodUsuarioMovimentacao = HttpContext.Session.GetComplexData<Usuario>("UserData").ID;
                     _usuarioRepository.Add(_usuario);
                     _flashMessage.Confirmation("Operação realizada com sucesso!");
                 }
@@ -63,10 +64,8 @@ namespace LabluzPro.Mvc.Controllers
         }
 
         public IActionResult EditUser()
-        {
-            string id = HttpContext.Session.GetString("ID");
-
-            var _usuario = _usuarioRepository.GetByIdUsuarioPerfil(Convert.ToInt16(id));
+        {           
+            var _usuario = _usuarioRepository.GetByIdUsuarioPerfil(HttpContext.Session.GetComplexData<Usuario>("UserData").ID);
             if (_usuario == null)
                 return NotFound();
 
@@ -112,7 +111,7 @@ namespace LabluzPro.Mvc.Controllers
                         Diverso.SaveImage(sImagem, "USUARIO", _usuario.sImagem);
                     }
 
-                    _usuario.iCodUsuarioMovimentacao = Convert.ToInt16(HttpContext.Session.GetString("ID"));
+                    _usuario.iCodUsuarioMovimentacao = HttpContext.Session.GetComplexData<Usuario>("UserData").ID;
                     _usuarioRepository.Update(_usuario);
                     _flashMessage.Confirmation("Operação realizada com sucesso!");
                 }

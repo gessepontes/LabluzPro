@@ -2,6 +2,7 @@
 using LabluzPro.Data.Repositories.Common;
 using LabluzPro.Domain.Entities;
 using LabluzPro.Domain.Interfaces;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace LabluzPro.Data.Repositories
@@ -67,6 +68,15 @@ namespace LabluzPro.Data.Repositories
             return p;
         }
 
-        public Usuario Login(Usuario obj) => conn.Query<Usuario>("SELECT * FROM Usuario WHERE sEmail =@sEmail AND sSenha = @sSenha ", new { obj.sEmail, obj.sSenha }).FirstOrDefault();
+        public Usuario Login(Usuario obj)
+        {
+            Usuario p = conn.Query<Usuario>("SELECT TOP(1) * FROM Usuario WHERE sEmail =@sEmail AND sSenha = @sSenha ", new { obj.sEmail, obj.sSenha }).FirstOrDefault();
+
+            if (p != null) {
+                p.UsuarioPagina = conn.Query<UsuarioPagina>("SELECT * FROM dbo.UsuarioPagina WHERE idUsuario = " + p.ID).ToList();
+            }
+            
+            return p;
+        }      
     }
 }

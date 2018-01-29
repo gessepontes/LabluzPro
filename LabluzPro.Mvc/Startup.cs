@@ -7,6 +7,7 @@ using System.IO;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Http;
 using LabluzPro.Ioc;
+using System;
 
 namespace LabluzPro.Mvc
 {
@@ -31,6 +32,11 @@ namespace LabluzPro.Mvc
             services.AddScoped<Vereyon.Web.IFlashMessage, Vereyon.Web.FlashMessage>();
 
             services.AddMvc();
+
+            services.AddSession(options => {
+                options.IdleTimeout = TimeSpan.FromMinutes(30);
+            });
+
             services.RegisterServices();
             services.AddDistributedMemoryCache(); // Adds a default in-memory implementation of IDistributedCache
             services.AddSession();
