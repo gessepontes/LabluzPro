@@ -68,7 +68,7 @@
                             <div class="form-group">
                                 <label asp-for="sImagem" class="control-label col-md-3 col-sm-3 col-xs-12"></label>
                                 <div class="col-md-5 col-sm-6 col-xs-12">
-                                    <input asp-for="sImagem" type="file" class="form-control col-md-7 col-xs-12" />
+                                    <input asp-for="sImagem" type="file" class="form-control-file col-md-7 col-xs-12" />
                                 </div>
 
                                 <span asp-validation-for="sImagem" class="text-danger"></span>
@@ -80,17 +80,17 @@
 
                                 <div class="col-md-3 col-sm-6 col-xs-12">
                                     @foreach (Paginas item in Enum.GetValues(typeof(Paginas)))
-                                    {
-                                        var nomePerfil = EnumHelper<Paginas>.GetDisplayValue(item);
+            {
+                var nomePerfil = EnumHelper<Paginas>.GetDisplayValue(item);
 
-                                        <div>
-                                            <label>
-                                                <input type="checkbox"
-                                                       name="PaginaSelecionado"
-                                                       value="@item" /> @nomePerfil
-                                                </label>
-                                            </div>
-                                        }
+                        <div>
+                            <label>
+                                <input type="checkbox"
+                                       name="PaginaSelecionado"
+                                       value="@item" /> @nomePerfil
+                                </label>
+                            </div>
+}
                                 </div>
                             </div>
 
