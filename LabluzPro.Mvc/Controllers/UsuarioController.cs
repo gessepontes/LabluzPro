@@ -78,11 +78,6 @@ namespace LabluzPro.Mvc.Controllers
 
         public IActionResult EditUser()
         {
-            if (!HttpContext.Session.GetComplexData<Usuario>("UserData").PaginaSelecionado.Contains(Paginas.Responsavel))
-            {
-                return RedirectToAction("DeniedAccess", "Login");
-            }
-
             var _usuario = _usuarioRepository.GetByIdUsuarioPerfil(HttpContext.Session.GetComplexData<Usuario>("UserData").ID);
             if (_usuario == null)
                 return NotFound();

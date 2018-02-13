@@ -83,15 +83,13 @@ namespace LabluzPro.Domain.Entities
 
     public enum Paginas : int
     {
-        [Display(Name = "Responsável")]
-        Responsavel = 1,
         [Display(Name = "Usuário")]
-        Usuario = 2,
+        Usuario = 1,
         [Display(Name = "Certificado")]
-        Certificado = 3,
+        Certificado = 2,
         [Display(Name = "Contrato")]
-        Contrato = 4,
+        Contrato = 3,
         [Display(Name = "Documentos")]
-        Documento = 5
+        Documento = 4
     }
 }

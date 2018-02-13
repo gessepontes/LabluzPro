@@ -68,29 +68,12 @@
                         <div class="menu_section">
                             <h3>Menu</h3>
                             <ul class="nav side-menu">
+                                <li><a href="@Url.Action("EditUser", "Usuario")"><i class="fa fa-certificate"></i>Responsável</a></li>
+
+
                                 @foreach (Paginas item in _usuario.PaginaSelecionado)
                                 {
-                                    @if (item == Paginas.Certificado)
-                                    {
-                                        <li><a href="@Url.Action("Index", "Certificado")"><i class="fa fa-certificate"></i>Certificado</a></li>
-                                    }
-                                    else if (item == Paginas.Contrato)
-                                    {
-                                        <li><a href="@Url.Action("Index", "Contrato")"><i class="fa fa-compress"></i>Contrato</a></li>
-                                    }
-                                    else if (item == Paginas.Documento)
-                                    {
-                                        <li><a href="@Url.Action("Index", "Documento")"><i class="fa fa fa-file"></i>Documento</a></li>
-                                    }
-                                    else if (item == Paginas.Usuario)
-                                    {
-                                        <li><a href="@Url.Action("Index", "Usuario")"><i class="fa fa-user"></i>Usuário</a></li>
-                                    }
-                                    else if (item == Paginas.Responsavel)
-                                    {
-                                        <li><a href="@Url.Action("EditUser", "Usuario")"><i class="fa fa-user-circle-o"></i>Responsável</a></li>
-                                    }
-
+                                    <li><a href="@Url.Action("Index", "" + @item + "")"><i class="fa fa-certificate"></i>@item</a></li>
                                 }
 
                             </ul>
