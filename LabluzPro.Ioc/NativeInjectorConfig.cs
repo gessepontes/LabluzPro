@@ -13,6 +13,7 @@ namespace LabluzPro.Ioc
             services.AddScoped<ICertificadoRepository, CertificadoRepository>();
             services.AddScoped<ITipoRepository, TipoRepository>();
             services.AddScoped<IUsuarioRepository, UsuarioRepository>();
+            services.AddScoped<IUsuarioPaginaRepository, UsuarioPaginaRepository>();
         }
     }
 }

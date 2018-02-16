@@ -14,19 +14,22 @@ namespace LabluzPro.Mvc.Controllers
     public class UsuarioController : Controller
     {
         private readonly IUsuarioRepository _usuarioRepository;
+        private readonly IUsuarioPaginaRepository _usuarioPaginaRepository;
         private readonly IFlashMessage _flashMessage;
         private readonly IConfiguration _configuration;
 
-        public UsuarioController(IUsuarioRepository usuarioRepository, IFlashMessage flashMessage, IConfiguration configuration)
+        public UsuarioController(IUsuarioRepository usuarioRepository, IFlashMessage flashMessage, 
+            IConfiguration configuration, IUsuarioPaginaRepository usuarioPaginaRepository)
         {
             _configuration = configuration;
             _usuarioRepository = usuarioRepository;
             _flashMessage = flashMessage;
+            _usuarioPaginaRepository = usuarioPaginaRepository;
         }
 
         public IActionResult Index() {
             
-            if (!HttpContext.Session.GetComplexData<Usuario>("UserData").PaginaSelecionado.Contains(Paginas.Usuario))
+            if (!Diverso.Acesso(HttpContext.Session.GetComplexData<Usuario>("UserData"),1))
             {
                 return RedirectToAction("DeniedAccess", "Login");
             }
@@ -37,10 +40,12 @@ namespace LabluzPro.Mvc.Controllers
 
         public IActionResult Create()
         {
-            if (!HttpContext.Session.GetComplexData<Usuario>("UserData").PaginaSelecionado.Contains(Paginas.Usuario))
+            if (!Diverso.Acesso(HttpContext.Session.GetComplexData<Usuario>("UserData"), 1))
             {
                 return RedirectToAction("DeniedAccess", "Login");
             }
+
+            ViewBag.Paginas = _usuarioPaginaRepository.Perfil();
 
             return View();
         }
@@ -48,7 +53,7 @@ namespace LabluzPro.Mvc.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create([Bind("sNome,sSenha,sEmail,bAtivo,sTelefone,PaginaSelecionado")] Usuario _usuario, IFormFile sImagem)
+        public IActionResult Create([Bind("sNome,sSenha,sEmail,bAtivo,sTelefone,PaginaSelecionada")] Usuario _usuario, IFormFile sImagem)
         {
             if (ModelState.IsValid)
             {
@@ -72,6 +77,8 @@ namespace LabluzPro.Mvc.Controllers
 
                 return RedirectToAction(nameof(Index));
             }
+
+            ViewBag.Paginas = _usuarioPaginaRepository.Perfil();
 
             return View(_usuario);
         }
@@ -97,7 +104,7 @@ namespace LabluzPro.Mvc.Controllers
 
         public IActionResult Edit(int? id)
         {
-            if (!HttpContext.Session.GetComplexData<Usuario>("UserData").PaginaSelecionado.Contains(Paginas.Usuario))
+            if (!Diverso.Acesso(HttpContext.Session.GetComplexData<Usuario>("UserData"), 1))
             {
                 return RedirectToAction("DeniedAccess", "Login");
             }
@@ -109,12 +116,14 @@ namespace LabluzPro.Mvc.Controllers
             if (_usuario == null)
                 return NotFound();
 
+            ViewBag.Paginas = _usuarioPaginaRepository.Perfil(_usuario.ID);
+
             return View(_usuario);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit(int id, [Bind("ID,sNome,sSenha,sEmail,bAtivo,sTelefone,PaginaSelecionado")]  Usuario _usuario, IFormFile sImagem)
+        public IActionResult Edit(int id, [Bind("ID,sNome,sSenha,sEmail,bAtivo,sTelefone,PaginaSelecionada")]  Usuario _usuario, IFormFile sImagem)
         {
             if (id != _usuario.ID)
                 return NotFound();
@@ -135,7 +144,7 @@ namespace LabluzPro.Mvc.Controllers
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    _flashMessage.Danger("Errro ao realizar a operação!");
+                    _flashMessage.Danger("Erro ao realizar a operação!");
 
                     if (!UsuarioExists(_usuario.ID))
                         return NotFound();
@@ -146,6 +155,8 @@ namespace LabluzPro.Mvc.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
+
+            ViewBag.Paginas = _usuarioPaginaRepository.Perfil(_usuario.ID);
 
             return View(_usuario);
         }
@@ -173,7 +184,7 @@ namespace LabluzPro.Mvc.Controllers
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    _flashMessage.Danger("Errro ao realizar a operação!");
+                    _flashMessage.Danger("Erro ao realizar a operação!");
 
                     if (!UsuarioExists(_usuario.ID))
                         return NotFound();
@@ -192,7 +203,7 @@ namespace LabluzPro.Mvc.Controllers
 
         public IActionResult Delete(int? id)
         {
-            if (!HttpContext.Session.GetComplexData<Usuario>("UserData").PaginaSelecionado.Contains(Paginas.Usuario))
+            if (!Diverso.Acesso(HttpContext.Session.GetComplexData<Usuario>("UserData"), 1))
             {
                 return RedirectToAction("DeniedAccess", "Login");
             }

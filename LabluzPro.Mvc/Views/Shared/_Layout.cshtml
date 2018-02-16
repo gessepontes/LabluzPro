@@ -27,6 +27,11 @@
     <link href="~/lib/datatables.net-responsive-bs/css/responsive.bootstrap.min.css" rel="stylesheet">
     <link href="~/lib/datatables.net-scroller-bs/css/scroller.bootstrap.min.css" rel="stylesheet">
 
+    <!-- PNotify -->
+    <link href="~/lib/pnotify/dist/pnotify.css" rel="stylesheet">
+    <link href="~/lib/pnotify/dist/pnotify.buttons.css" rel="stylesheet">
+    <link href="~/lib/pnotify/dist/pnotify.nonblock.css" rel="stylesheet">
+
     <script src="~/js/moment.js"></script>
     <!-- bootstrap-datetimepicker -->
     <link href="~/lib/bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.css" rel="stylesheet">
@@ -48,7 +53,7 @@
             <div class="col-md-3 left_col">
                 <div class="left_col scroll-view">
                     <div class="navbar nav_title" style="border: 0;">
-                        <a href="index.html" class="site_title"><i class="fa fa-paw"></i> <span>LabLuz</span></a>
+                        <a href="@Url.Action("Index", "Home")" class="site_title"><i class="fa fa-paw"></i> <span>LabLuz</span></a>
                     </div>
                     <div class="clearfix"></div>
                     <!-- menu profile quick info -->
@@ -68,12 +73,9 @@
                         <div class="menu_section">
                             <h3>Menu</h3>
                             <ul class="nav side-menu">
-                                <li><a href="@Url.Action("EditUser", "Usuario")"><i class="fa fa-certificate"></i>Responsável</a></li>
-
-
-                                @foreach (Paginas item in _usuario.PaginaSelecionado)
+                                @foreach (UsuarioPagina item in _usuario.UsuarioPagina)
                                 {
-                                    <li><a href="@Url.Action("Index", "" + @item + "")"><i class="fa fa-certificate"></i>@item</a></li>
+                                    <li><a href="@Url.Action("" + @item.Pagina.sNomeView + "", "" + @item.Pagina.sNomeController + "")"><i class="@item.Pagina.sIcons"></i>@item.Pagina.sNome</a></li>
                                 }
 
                             </ul>

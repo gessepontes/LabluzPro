@@ -77,19 +77,9 @@ namespace LabluzPro.Domain.Entities
         public int iCodUsuarioMovimentacao { get; set; }
 
         [Display(Name = "Páginas")]
-        public virtual ICollection<UsuarioPagina> UsuarioPagina { get; set; }
-        public List<Paginas> PaginaSelecionado { get; set; }
-    }
+        public virtual List<UsuarioPagina> UsuarioPagina { get; set; }
 
-    public enum Paginas : int
-    {
-        [Display(Name = "Usuário")]
-        Usuario = 1,
-        [Display(Name = "Certificado")]
-        Certificado = 2,
-        [Display(Name = "Contrato")]
-        Contrato = 3,
-        [Display(Name = "Documentos")]
-        Documento = 4
+        public virtual List<int> PaginaSelecionada { get; set; }
+
     }
 }

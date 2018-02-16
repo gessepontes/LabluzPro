@@ -27,7 +27,7 @@ namespace LabluzPro.Mvc.Controllers
         }
 
         public IActionResult Index() {
-            if (!HttpContext.Session.GetComplexData<Usuario>("UserData").PaginaSelecionado.Contains(Paginas.Documento))
+            if (!Diverso.Acesso(HttpContext.Session.GetComplexData<Usuario>("UserData"), 2))
             {
                 return RedirectToAction("DeniedAccess", "Login");
             }
@@ -38,7 +38,7 @@ namespace LabluzPro.Mvc.Controllers
 
         public IActionResult Create()
         {
-            if (!HttpContext.Session.GetComplexData<Usuario>("UserData").PaginaSelecionado.Contains(Paginas.Documento))
+            if (!Diverso.Acesso(HttpContext.Session.GetComplexData<Usuario>("UserData"), 2))
             {
                 return RedirectToAction("DeniedAccess", "Login");
             }
@@ -85,7 +85,7 @@ namespace LabluzPro.Mvc.Controllers
 
         public IActionResult Edit(int? id)
         {
-            if (!HttpContext.Session.GetComplexData<Usuario>("UserData").PaginaSelecionado.Contains(Paginas.Documento))
+            if (!Diverso.Acesso(HttpContext.Session.GetComplexData<Usuario>("UserData"), 2))
             {
                 return RedirectToAction("DeniedAccess", "Login");
             }
@@ -145,7 +145,7 @@ namespace LabluzPro.Mvc.Controllers
 
         public IActionResult Delete(int? id)
         {
-            if (!HttpContext.Session.GetComplexData<Usuario>("UserData").PaginaSelecionado.Contains(Paginas.Documento))
+            if (!Diverso.Acesso(HttpContext.Session.GetComplexData<Usuario>("UserData"), 2))
             {
                 return RedirectToAction("DeniedAccess", "Login");
             }

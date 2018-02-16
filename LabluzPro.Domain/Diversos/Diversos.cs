@@ -9,6 +9,7 @@ using System.Globalization;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Http;
 using System.IO;
+using LabluzPro.Domain.Entities;
 
 namespace LabluzPro.Domain.Diversos
 {
@@ -279,5 +280,18 @@ namespace LabluzPro.Domain.Diversos
         }, "Value", "Text", IRODADA);
 
         }
+
+        public static bool Acesso(Usuario user, int idPagina)
+        {
+            foreach (var item in user.UsuarioPagina)
+            {
+                if (item.idPagina == idPagina) {
+                    return true;
+                }
+            }
+           
+            return false;
+        }
+
     }
 }

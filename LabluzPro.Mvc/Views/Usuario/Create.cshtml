@@ -79,15 +79,13 @@
                                 <label class="control-label col-md-3 col-sm-3 col-xs-12">Páginas</label>
 
                                 <div class="col-md-3 col-sm-6 col-xs-12">
-                                    @foreach (Paginas item in Enum.GetValues(typeof(Paginas)))
+                                    @foreach (UsuarioPagina item in ViewBag.Paginas)
                                     {
-                                        var nomePerfil = EnumHelper<Paginas>.GetDisplayValue(item);
-
                                         <div>
                                             <label>
                                                 <input type="checkbox"
-                                                       name="PaginaSelecionado"
-                                                       value="@item" /> @nomePerfil
+                                                       name="PaginaSelecionada"
+                                                       value="@item.Pagina.ID" /> @item.Pagina.sNome
                                                 </label>
                                             </div>
                                         }

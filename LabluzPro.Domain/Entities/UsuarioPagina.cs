@@ -7,7 +7,7 @@
         public int idUsuario { get; set; }
         public int idPagina { get; set; }
 
-        public Paginas Pagina { get; set; }
+        public Pagina Pagina { get; set; }
         public virtual Usuario Usuario { get; set; }
 
     }

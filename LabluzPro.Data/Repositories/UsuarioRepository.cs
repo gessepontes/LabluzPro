@@ -18,11 +18,11 @@ namespace LabluzPro.Data.Repositories
 
             var returnId = conn.Query<int>(sql, new { obj.sNome, obj.sEmail, obj.sSenha, obj.bAtivo, obj.sImagem, obj.sTelefone, obj.iCodUsuarioMovimentacao, obj.dCadastro }).SingleOrDefault();
 
-            if (returnId != 0 && obj.PaginaSelecionado.Count > 0)
+            if (returnId != 0 && obj.PaginaSelecionada.Count > 0)
             {
-                foreach (var idPagina in obj.PaginaSelecionado)
+                foreach (var item in obj.PaginaSelecionada)
                 {
-                    conn.Execute(@"INSERT UsuarioPagina(idUsuario,idPagina) values(@idUsuario,@idPagina)", new { idUsuario = returnId, idPagina });
+                    conn.Execute(@"INSERT UsuarioPagina(idUsuario,idPagina) values(@idUsuario,@idPagina)", new { idUsuario = returnId, idPagina = item });
                 }
 
             }
@@ -42,9 +42,9 @@ namespace LabluzPro.Data.Repositories
 
             conn.Execute("DELETE FROM UsuarioPagina WHERE idUsuario = @ID; ", new { obj.ID });
 
-            foreach (var idPagina in obj.PaginaSelecionado)
+            foreach (var item in obj.PaginaSelecionada)
             {
-                conn.Execute(@"INSERT UsuarioPagina(idUsuario,idPagina) values(@idUsuario,@idPagina)", new { idUsuario = obj.ID, idPagina });
+                conn.Execute(@"INSERT UsuarioPagina(idUsuario,idPagina) values(@idUsuario,@idPagina)", new { idUsuario = obj.ID, idPagina = item });
             }
         }
 
@@ -64,7 +64,16 @@ namespace LabluzPro.Data.Repositories
         public Usuario GetByIdUsuarioPerfil(int? id)
         {
             Usuario p = GetById(id);
-            p.UsuarioPagina = conn.Query<UsuarioPagina>("SELECT * FROM dbo.UsuarioPagina WHERE idUsuario = " + id).ToList();
+
+            p.UsuarioPagina = conn.Query<UsuarioPagina, Pagina, UsuarioPagina>(
+                @"SELECT * FROM dbo.UsuarioPagina up INNER JOIN Pagina p ON up.idPagina = p.ID WHERE idUsuario = @ID",
+                    map: (usuarioPagina, pagina) =>
+                    {
+                        usuarioPagina.Pagina = pagina;
+                        return usuarioPagina;
+                    },
+                    param: new { p.ID }).ToList();
+
             return p;
         }
 
@@ -72,11 +81,19 @@ namespace LabluzPro.Data.Repositories
         {
             Usuario p = conn.Query<Usuario>("SELECT TOP(1) * FROM Usuario WHERE sEmail =@sEmail AND sSenha = @sSenha ", new { obj.sEmail, obj.sSenha }).FirstOrDefault();
 
-            if (p != null) {
-                p.PaginaSelecionado = conn.Query<Paginas>("SELECT idPagina FROM dbo.UsuarioPagina WHERE idUsuario = " + p.ID).ToList();
+            if (p != null)
+            {
+                p.UsuarioPagina = conn.Query<UsuarioPagina, Pagina, UsuarioPagina>(
+                    @"SELECT * FROM dbo.UsuarioPagina up INNER JOIN Pagina p ON up.idPagina = p.ID WHERE idUsuario = @ID",
+                        map: (usuarioPagina, pagina) =>
+                        {
+                            usuarioPagina.Pagina = pagina;
+                            return usuarioPagina;
+                        },
+                        param: new { p.ID }).ToList();
             }
-            
+
             return p;
-        }      
+        }
     }
 }
