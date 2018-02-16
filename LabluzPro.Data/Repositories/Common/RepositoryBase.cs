@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.IO;
+using System.Linq;
 
 namespace LabluzPro.Data.Repositories.Common
 {
@@ -44,6 +45,8 @@ namespace LabluzPro.Data.Repositories.Common
         public virtual void Add(TEntity obj) => conn.Insert(obj);
 
         public virtual IEnumerable<TEntity> GetAll() => conn.GetAll<TEntity>();
+
+        public virtual int Count() => conn.GetAll<TEntity>().Count();
 
         public virtual TEntity GetById(int? id) => conn.Get<TEntity>(id);
 

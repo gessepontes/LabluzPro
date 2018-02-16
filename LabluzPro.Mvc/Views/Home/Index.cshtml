@@ -12,21 +12,21 @@
                 <div class="animated flipInY col-lg-3 col-md-3 col-sm-6 col-xs-12">
                     <div class="tile-stats">
                         <div class="icon"><i class="fa fa-comment"></i></div>
-                        <div class="count">10</div>
+                        <div class="count">@ViewBag.DocumentoCount</div>
                         <h3>Certificados</h3>
                     </div>
                 </div>
                 <div class="animated flipInY col-lg-3 col-md-3 col-sm-6 col-xs-12">
                     <div class="tile-stats">
                         <div class="icon"><i class="fa fa-book"></i></div>
-                        <div class="count">2</div>
+                        <div class="count">@ViewBag.ContratoCount</div>
                         <h3>Contratos</h3>
                     </div>
                 </div>
                 <div class="animated flipInY col-lg-3 col-md-3 col-sm-6 col-xs-12">
                     <div class="tile-stats">
                         <div class="icon"><i class="fa fa-address-book"></i></div>
-                        <div class="count">53</div>
+                        <div class="count">@ViewBag.DocumentoCount</div>
                         <h3>Documentos</h3>
                     </div>
                 </div>
@@ -52,7 +52,7 @@
             var myStack = { "dir1": "down", "dir2": "right", "push": "top" };
             new PNotify({
                 title: 'Atenção!',
-                text: 'Possui documentos proximos a vercer. Verifique e regularize sua pendência.',
+                text: 'Possui documentos, certificados e contratos proximos a vercer. Verifique e regularize a pendência.',
                 type: 'info',
                 styling: 'bootstrap3',
                 addclass: 'dark',

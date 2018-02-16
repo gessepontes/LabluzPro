@@ -7,6 +7,7 @@ namespace LabluzPro.Domain.Interfaces.Repositories.Common
         void Add(TEntity obj);
         TEntity GetById(int? id);
         IEnumerable<TEntity> GetAll();
+        int Count();
         void Update(TEntity obj);
         void Remove(TEntity obj);
     }
