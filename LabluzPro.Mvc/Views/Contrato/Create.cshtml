@@ -18,44 +18,39 @@
                     <div class="x_content">
                         <br />
 
-                        <form enctype="multipart/form-data" asp-action="Create" class="form-horizontal form-label-left">
+                        <form enctype="multipart/form-data" asp-action="Create" class="form-horizontal form-label-left" data-toggle="validator">
                             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
 
                             <div class="form-group">
                                 <label asp-for="sNome" class="control-label col-md-3 col-sm-3 col-xs-12"></label>
                                 <div class="col-md-5 col-sm-6 col-xs-12">
-                                    <input asp-for="sNome" class="form-control col-md-7 col-xs-12" />
+                                    <input asp-for="sNome" class="form-control col-md-7 col-xs-12" required/>
                                 </div>
-                                <span asp-validation-for="sNome" class="text-danger"></span>
                             </div>
 
                             <div class="form-group">
                                 <label asp-for="sNumero" class="control-label col-md-3 col-sm-3 col-xs-12"></label>
                                 <div class="col-md-2 col-sm-6 col-xs-12">
-                                    <input asp-for="sNumero" class="form-control col-md-7 col-xs-12" />
+                                    <input asp-for="sNumero" class="form-control col-md-7 col-xs-12" required/>
                                 </div>
-                                <span asp-validation-for="sNumero" class="text-danger"></span>
                             </div>
 
                             <div class="form-group">
                                 <label asp-for="dVencimento" class="control-label col-md-3 col-sm-3 col-xs-12"></label>
                                 <div class="col-md-2 col-sm-6 col-xs-12">
-                                    <input asp-for="dVencimento" class="form-control col-md-7 col-xs-12" />
+                                    <input asp-for="dVencimento" class="form-control col-md-7 col-xs-12" required/>
                                 </div>
-                                <span asp-validation-for="dVencimento" class="text-danger"></span>
                             </div>
 
                             <div class="form-group">
                                 <label asp-for="IdTipo" class="control-label col-md-3 col-sm-3 col-xs-12"></label>
                                 <div class="col-md-5 col-sm-6 col-xs-12">
                                     <select asp-for="IdTipo" onchange="HabilitaDiv();"
-                                            class="form-control" asp-items="@(new SelectList(@ViewBag.ListaTipo,"ID", "sNome"))">
+                                            class="form-control" asp-items="@(new SelectList(@ViewBag.ListaTipo,"ID", "sNome"))" required>
                                         <option value="">Selecione o tipo</option>
                                     </select>
                                 </div>
-
-                                <span asp-validation-for="IdTipo" class="text-danger"></span>
                             </div>
 
                             <div id="divSevico">
@@ -63,12 +58,10 @@
                                     <label asp-for="IdTipoServico" class="control-label col-md-3 col-sm-3 col-xs-12"></label>
                                     <div class="col-md-5 col-sm-6 col-xs-12">
                                         <select asp-for="IdTipoServico"
-                                                class="form-control" asp-items="@(new SelectList(@ViewBag.ListaTipoServico,"ID", "sNome"))">
+                                                class="form-control" asp-items="@(new SelectList(@ViewBag.ListaTipoServico,"ID", "sNome"))" required>
                                             <option value="">Selecione o tipo de Serviço</option>
                                         </select>
                                     </div>
-
-                                    <span asp-validation-for="IdTipoServico" class="text-danger"></span>
                                 </div>
                             </div>
 
@@ -77,12 +70,10 @@
                                     <label asp-for="IdTipoEquipamento" class="control-label col-md-3 col-sm-3 col-xs-12"></label>
                                     <div class="col-md-5 col-sm-6 col-xs-12">
                                         <select asp-for="IdTipoEquipamento"
-                                                class="form-control" asp-items="@(new SelectList(@ViewBag.ListaTipoEquipamento,"ID", "sNome"))">
+                                                class="form-control" asp-items="@(new SelectList(@ViewBag.ListaTipoEquipamento,"ID", "sNome"))" required>
                                             <option value="">Selecione o tipo equipamentos</option>
                                         </select>
                                     </div>
-
-                                    <span asp-validation-for="IdTipoEquipamento" class="text-danger"></span>
                                 </div>
                             </div>
 
@@ -91,8 +82,6 @@
                                 <div class="col-md-5 col-sm-6 col-xs-12">
                                     <input asp-for="sImagem" type="file" class="form-control col-md-7 col-xs-12" />
                                 </div>
-
-                                <span asp-validation-for="sImagem" class="text-danger"></span>
                             </div>
 
 
