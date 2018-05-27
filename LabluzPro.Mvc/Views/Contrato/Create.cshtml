@@ -58,7 +58,7 @@
                                     <label asp-for="IdTipoServico" class="control-label col-md-3 col-sm-3 col-xs-12"></label>
                                     <div class="col-md-5 col-sm-6 col-xs-12">
                                         <select asp-for="IdTipoServico"
-                                                class="form-control" asp-items="@(new SelectList(@ViewBag.ListaTipoServico,"ID", "sNome"))" required>
+                                                class="form-control" asp-items="@(new SelectList(@ViewBag.ListaTipoServico,"ID", "sNome"))">
                                             <option value="">Selecione o tipo de Serviço</option>
                                         </select>
                                     </div>
@@ -70,7 +70,7 @@
                                     <label asp-for="IdTipoEquipamento" class="control-label col-md-3 col-sm-3 col-xs-12"></label>
                                     <div class="col-md-5 col-sm-6 col-xs-12">
                                         <select asp-for="IdTipoEquipamento"
-                                                class="form-control" asp-items="@(new SelectList(@ViewBag.ListaTipoEquipamento,"ID", "sNome"))" required>
+                                                class="form-control" asp-items="@(new SelectList(@ViewBag.ListaTipoEquipamento,"ID", "sNome"))">
                                             <option value="">Selecione o tipo equipamentos</option>
                                         </select>
                                     </div>

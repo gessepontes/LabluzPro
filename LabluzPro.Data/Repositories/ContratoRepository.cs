@@ -2,7 +2,9 @@
 using LabluzPro.Data.Repositories.Common;
 using LabluzPro.Domain.Entities;
 using LabluzPro.Domain.Interfaces;
+using Microsoft.Extensions.Configuration;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 
 namespace LabluzPro.Data.Repositories
@@ -40,5 +42,25 @@ namespace LabluzPro.Data.Repositories
             conn.Execute(sql, new { obj.sNumero, obj.sNome, obj.dVencimento, obj.IdTipoEquipamento, obj.IdTipoServico, obj.sImagem, obj.IdTipo, obj.iCodUsuarioMovimentacao, obj.dCadastro, obj.ID });
 
         }
+
+        public IEnumerable<Contrato> GetAllVencidos()
+        {
+            var builder = new ConfigurationBuilder()
+.SetBasePath(Directory.GetCurrentDirectory())
+.AddJsonFile("appsettings.json").Build();
+
+            string Dias = builder.GetSection(key: "Dias")["Dias"];
+
+            return conn.Query<Contrato, Tipo, Contrato>(
+            @"SELECT * FROM Contrato C INNER JOIN Tipo T ON C.idTipo = T.ID WHERE C.dVencimento <= DATEADD(Day, " + Dias + ", GETDATE())",
+            map: (contrato, tipo) =>
+            {
+                contrato.Tipo = tipo;
+                return contrato;
+            });
+
+
+        }
+
     }
 }

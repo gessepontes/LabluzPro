@@ -22,6 +22,10 @@ namespace LabluzPro.Mvc.Controllers
             ViewBag.DocumentoCount = _documentoRepository.Count();
             ViewBag.ContratoCount = _contratoRepository.Count();
             ViewBag.CertificadoCount = _certificadoRepository.Count();
+
+            ViewBag.DocumentoVencimentoCount = _documentoRepository.GetAllVencidos();
+            ViewBag.ContratoVencimentoCount = _contratoRepository.GetAllVencidos();
+            ViewBag.CertificadoVencimentoCount = _certificadoRepository.GetAllVencidos();
             return View();
         }
     }

@@ -1,7 +1,4 @@
-﻿using LabluzPro.Data.Mappings;
-using LabluzPro.Domain.Interfaces.Repositories.Common;
-using Dapper.FluentMap;
-using Dapper.FluentMap.Dommel;
+﻿using LabluzPro.Domain.Interfaces.Repositories.Common;
 using Dommel;
 using Microsoft.Extensions.Configuration;
 using System;
@@ -18,20 +15,6 @@ namespace LabluzPro.Data.Repositories.Common
 
         public RepositoryBase()
         {
-            if (FluentMapper.EntityMaps.IsEmpty)
-            {
-                FluentMapper.Initialize(c =>
-                {
-                    c.AddMap(new DocumentoMap());
-                    c.AddMap(new ContratoMap());
-                    c.AddMap(new CertificadoMap());
-                    c.AddMap(new TipoMap());
-                    c.AddMap(new UsuarioMap());
-                    c.AddMap(new UsuarioPaginaMap());
-                    c.ForDommel();
-                });
-            }
-
             var config = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
                 .AddJsonFile("appsettings.json")

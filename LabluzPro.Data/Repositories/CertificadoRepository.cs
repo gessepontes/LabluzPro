@@ -2,7 +2,9 @@
 using LabluzPro.Data.Repositories.Common;
 using LabluzPro.Domain.Entities;
 using LabluzPro.Domain.Interfaces;
+using Microsoft.Extensions.Configuration;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 
 namespace LabluzPro.Data.Repositories
@@ -39,6 +41,24 @@ namespace LabluzPro.Data.Repositories
             sql = "UPDATE Certificado SET sNumero = @sNumero,sNome = @sNome,dVencimento = @dVencimento,dServico = @dServico,IdTipo =@IdTipo,iCodUsuarioMovimentacao=@iCodUsuarioMovimentacao,dCadastro=@dCadastro " + parametros + " WHERE ID = @ID; ";
 
             conn.Execute(sql, new { obj.sNumero, obj.sNome, obj.dVencimento, obj.dServico, obj.sImagem,obj.IdTipo, obj.iCodUsuarioMovimentacao, obj.dCadastro, obj.ID });
+
+        }
+
+        public IEnumerable<Certificado> GetAllVencidos()
+        {
+            var builder = new ConfigurationBuilder()
+.SetBasePath(Directory.GetCurrentDirectory())
+.AddJsonFile("appsettings.json").Build();
+
+            string Dias = builder.GetSection(key: "Dias")["Dias"];
+
+            return conn.Query<Certificado, Tipo, Certificado>(
+        @"SELECT * FROM Certificado C INNER JOIN Tipo T ON C.idTipo = T.ID WHERE C.dVencimento <= DATEADD(Day, " + Dias + ", GETDATE())",
+            map: (certificado, tipo) =>
+            {
+                certificado.Tipo = tipo;
+                return certificado;
+            });
 
         }
     }

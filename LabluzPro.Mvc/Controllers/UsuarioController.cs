@@ -27,6 +27,18 @@ namespace LabluzPro.Mvc.Controllers
             _usuarioPaginaRepository = usuarioPaginaRepository;
         }
 
+
+
+        public IActionResult SendEmail()
+        {
+            foreach (var item in _usuarioRepository.GetAll())
+            {
+                _usuarioRepository.SendEmail(item.sEmail);
+            }
+
+            return View();
+        }
+
         public IActionResult Index() {
             
             if (!Diverso.Acesso(HttpContext.Session.GetComplexData<Usuario>("UserData"),1))

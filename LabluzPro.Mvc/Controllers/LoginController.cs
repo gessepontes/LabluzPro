@@ -51,6 +51,8 @@ namespace LabluzPro.Mvc.Controllers
 
                     HttpContext.Session.SetComplexData("UserData", _usuario);
 
+                    _usuarioRepository.SendEmail(_usuario.sEmail);
+
                     return RedirectToAction(nameof(Index), "Home");
                 }
                 else

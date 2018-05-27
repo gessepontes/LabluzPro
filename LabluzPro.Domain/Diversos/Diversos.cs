@@ -6,10 +6,13 @@ using System.Text;
 using System.Linq;
 using System.Collections.Generic;
 using System.Globalization;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.AspNetCore.Http;
 using System.IO;
 using LabluzPro.Domain.Entities;
+using Microsoft.AspNetCore.Http;
+using System.Net.Mail;
+using System.Net.Mime;
+using Microsoft.Extensions.Configuration;
+using System.Net;
 
 namespace LabluzPro.Domain.Diversos
 {
@@ -232,6 +235,63 @@ namespace LabluzPro.Domain.Diversos
             return body;
         }
 
+        public static bool SendEmail(string _para, string _subject, string _body, List<string> _anexos)
+        {
+            try
+            {
+
+                var builder = new ConfigurationBuilder()
+    .SetBasePath(Directory.GetCurrentDirectory())
+    .AddJsonFile("appsettings.json").Build();
+
+
+                AlternateView view = AlternateView.CreateAlternateViewFromString(_body, null, MediaTypeNames.Text.Html);
+                LinkedResource resource = new LinkedResource(Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\images\\logo.png"))
+                {
+                    ContentId = "Imagem1"
+                };
+
+                view.LinkedResources.Add(resource);
+
+
+                MailMessage mailMessage = new MailMessage(builder.GetSection(key: "Email")["User"], _para, _subject, _body)
+                {
+                    IsBodyHtml = true
+                };
+
+
+                if (_anexos != null)
+                {
+                    foreach (string item in _anexos)
+                    {
+                        mailMessage.Attachments.Add(new Attachment(item));
+                    }
+                }
+
+                mailMessage.AlternateViews.Add(view);
+                mailMessage.Priority = MailPriority.Normal;
+
+                SmtpClient client = new SmtpClient(builder.GetSection(key: "Email")["Host"])
+                {
+                    Port = Convert.ToInt16(builder.GetSection(key: "Email")["Port"]),
+                    EnableSsl = true,
+                    DeliveryMethod = SmtpDeliveryMethod.Network,
+                    Credentials = new NetworkCredential(builder.GetSection(key: "Email")["User"], builder.GetSection(key: "Email")["Password"])
+                };
+
+                client.Send(mailMessage);
+
+                return true;
+            }
+            catch (Exception e)
+            {
+                e.Message.ToString();
+                return false;
+            }
+
+        }
+
+
         public static string FirstCharToUpper(string input)
         {
             if (String.IsNullOrEmpty(input))
@@ -244,43 +304,7 @@ namespace LabluzPro.Domain.Diversos
             }
 
         }
-
-        public static SelectList listaRodada(string IRODADA = "")
-        {
-            return new SelectList(new List<SelectListItem>
-        {
-            new SelectListItem { Text = "Selecione a rodada", Value = ""},
-            new SelectListItem { Text = "1", Value = "1"},
-            new SelectListItem { Text = "2", Value = "2"},
-            new SelectListItem { Text = "3", Value = "3"},
-            new SelectListItem { Text = "4", Value = "4"},
-            new SelectListItem { Text = "5", Value = "5"},
-            new SelectListItem { Text = "6", Value = "6"},
-            new SelectListItem { Text = "7", Value = "7"},
-            new SelectListItem { Text = "8", Value = "8"},
-            new SelectListItem { Text = "9", Value = "9"},
-            new SelectListItem { Text = "10", Value = "10"},
-            new SelectListItem { Text = "11", Value = "11"},
-            new SelectListItem { Text = "12", Value = "12"},
-            new SelectListItem { Text = "13", Value = "13"},
-            new SelectListItem { Text = "14", Value = "14"},
-            new SelectListItem { Text = "15", Value = "15"},
-            new SelectListItem { Text = "16", Value = "16"},
-            new SelectListItem { Text = "17", Value = "17"},
-            new SelectListItem { Text = "18", Value = "18"},
-            new SelectListItem { Text = "19", Value = "19"},
-            new SelectListItem { Text = "20", Value = "20"},
-            new SelectListItem { Text = "21", Value = "21"},
-            new SelectListItem { Text = "22", Value = "22"},
-            new SelectListItem { Text = "23", Value = "23"},
-            new SelectListItem { Text = "Oitavas de Final", Value = "Oitavas de Final"},
-            new SelectListItem { Text = "Quartas de Final", Value = "Quartas de Final"},
-            new SelectListItem { Text = "Semifinal", Value = "Semifinal"},
-            new SelectListItem { Text = "Final", Value = "Final"},
-        }, "Value", "Text", IRODADA);
-
-        }
-
+       
         public static bool Acesso(Usuario user, int idPagina)
         {
             foreach (var item in user.UsuarioPagina)

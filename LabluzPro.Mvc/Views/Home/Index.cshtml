@@ -2,12 +2,9 @@
 @{
     ViewData["Title"] = "Index";
 }
-
 <div class="right_col" role="main">
-
     <div class="col-md-12 col-sm-12 col-xs-12">
         <div class="x_panel">
-
             <div class="row top_tiles">
                 <div class="animated flipInY col-lg-3 col-md-3 col-sm-6 col-xs-12">
                     <div class="tile-stats">
@@ -34,33 +31,64 @@
         </div>
     </div>
 </div>
-
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-
     <!-- PNotify -->
     <script src="~/lib/pnotify/dist/pnotify.js"></script>
     <script src="~/lib/pnotify/dist/pnotify.buttons.js"></script>
     <script src="~/lib/pnotify/dist/pnotify.nonblock.js"></script>
-
     <script>
+
         $(document).ready(function () {
             $('.ui-pnotify').remove();
         });
 
-        $(function () {
-            var myStack = { "dir1": "down", "dir2": "right", "push": "top" };
-            new PNotify({
-                title: 'Atenção!',
-                text: 'Possui documentos, certificados e contratos proximos a vercer. Verifique e regularize a pendência.',
-                type: 'info',
-                styling: 'bootstrap3',
-                addclass: 'dark',
-                stack: myStack
-            })
-        });
+        if (@ViewBag.CertificadoVencimentoCount.Count > 0) {
+
+
+            $(function () {
+                var myStack = { "dir1": "down", "dir2": "right", "push": "top" };
+                new PNotify({
+                    title: 'Atenção!',
+                    text: 'Possui certificados  proximos a vercer. Verifique e regularize a pendência.',
+                    type: 'info',
+                    styling: 'bootstrap3',
+                    addclass: 'dark'
+                })
+            });
+
+        }
+
+        if (@ViewBag.ContratoVencimentoCount.Count > 0) {
+
+            $(function () {
+                var myStack = { "dir1": "down", "dir2": "right", "push": "top" };
+                new PNotify({
+                    title: 'Atenção!',
+                    text: 'Possui contratos proximos a vercer. Verifique e regularize a pendência.',
+                    type: 'info',
+                    styling: 'bootstrap3',
+                    addclass: 'dark'
+                })
+            });
+
+        }
+
+        if (@ViewBag.DocumentoVencimentoCount.Count > 0) {
+
+            $(function () {
+                var myStack = { "dir1": "down", "dir2": "right", "push": "top" };
+                new PNotify({
+                    title: 'Atenção!',
+                    text: 'Possui documentos proximos a vercer. Verifique e regularize a pendência.',
+                    type: 'info',
+                    styling: 'bootstrap3',
+                    addclass: 'dark'
+                })
+            });
+
+        }
+
     </script>
 }
-
-
 

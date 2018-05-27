@@ -1,8 +1,8 @@
 ﻿using Dapper;
 using LabluzPro.Data.Repositories.Common;
+using LabluzPro.Domain.Diversos;
 using LabluzPro.Domain.Entities;
 using LabluzPro.Domain.Interfaces;
-using System.Collections.Generic;
 using System.Linq;
 
 namespace LabluzPro.Data.Repositories
@@ -94,6 +94,65 @@ namespace LabluzPro.Data.Repositories
             }
 
             return p;
+        }
+
+        public void SendEmail(string sEmail)
+        {
+            string _body = "";
+            string strBody = "";
+            string sTitulo = "";
+            int Count = 0;
+
+            CertificadoRepository certificadoRepository = new CertificadoRepository();
+            ContratoRepository contratoRepository = new ContratoRepository();
+            DocumentoRepository documentoRepository = new DocumentoRepository();
+
+            _body =  "<tr style='=font-weight:bold;' align=center><td>AVISO DE VENCIMENTO</td></tr>";
+
+            foreach (Certificado item in certificadoRepository.GetAllVencidos())
+            {
+                _body += "<tr><td font-weight:bold'><b>Certificado: </b>" + item.sNome + "</td></tr>";
+                Count = Count + 1;
+            }
+
+            foreach (Contrato item in contratoRepository.GetAllVencidos())
+            {
+                _body += "<tr><td font-weight:bold'><b>Contrato: </b>" + item.sNome + "</td></tr>";
+                Count = Count + 1;
+            }
+
+            foreach (Documento item in documentoRepository.GetAllVencidos())
+            {
+                _body += "<tr><td font-weight:bold'><b>Documeto: </b>" + item.sNome + "</td></tr>";
+                Count = Count + 1;
+            }
+
+            strBody = "";
+            strBody = strBody + "<html>";
+            strBody = strBody + "<head>";
+            strBody = strBody + "<meta http-equiv='Content-Type' content='text/html; charset=iso-8859-1'>";
+            strBody = strBody + "<title>Untitled Document</title>";
+            strBody = strBody + "</head>";
+            strBody = strBody + "<body>";
+
+            strBody = strBody + "<table style='font-family: verdana; font-size: 11px; color: #000000;' width='100%'>";
+            strBody = strBody + "<tr align=center><td colspan=2><img src='cid:Imagem1' /></td></tr>";
+            strBody = strBody + "<tr align=center><td colspan=2></td></tr>";
+           
+            strBody = strBody + "<tr><td font-weight:bold'><p><p></td></tr> ";
+            strBody = strBody + _body;
+            strBody = strBody + "</table> ";
+            strBody = strBody + "<br><br>";
+            strBody = strBody + "Esta é uma  mensagem automática enviada pelo sistema. Não precisa responder.";
+            strBody = strBody + "</body>";
+            strBody = strBody + "</html>";
+
+            sTitulo = "Alerta de vencimentos";
+
+            if (Count > 0) {
+                Diverso.SendEmail(sEmail, sTitulo, strBody, null);
+            }
+            
         }
     }
 }
