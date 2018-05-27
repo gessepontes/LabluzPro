@@ -108,7 +108,6 @@ namespace LabluzPro.Mvc.Controllers
             else {
                 _usuario.sImagem = _configuration.GetSection("AppConfiguration")["ResourcesPath:Usuario"] + "user.png";
             }
-            
 
             return View(_usuario);
         }
@@ -192,6 +191,9 @@ namespace LabluzPro.Mvc.Controllers
 
                     _usuario.iCodUsuarioMovimentacao = Convert.ToInt16(HttpContext.Session.GetString("ID"));
                     _usuarioRepository.UpdateUser(_usuario);
+
+                    HttpContext.Session.SetComplexData("UserData", _usuarioRepository.GetByIdUsuarioPerfil(_usuario.ID));
+
                     _flashMessage.Confirmation("Operação realizada com sucesso!");
                 }
                 catch (DbUpdateConcurrencyException)
