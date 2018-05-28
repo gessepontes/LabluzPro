@@ -18,7 +18,6 @@ namespace LabluzPro.Domain.Diversos
 {
     public static class Diverso
     {
-
         public static string GenerateMD5(string yourString)
         {
             if (yourString == "" || yourString == null)
@@ -30,21 +29,25 @@ namespace LabluzPro.Domain.Diversos
 
         public static async void SaveImage(IFormFile foto, string destino, string sFoto)
         {
+            var builder = new ConfigurationBuilder()
+                .SetBasePath(Directory.GetCurrentDirectory())
+                .AddJsonFile("appsettings.json").Build();
+
             string path = "";
 
             switch (destino)
             {
                 case "CERTIFICADO":
-                    path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\images\\certificado", sFoto);
+                    path = Path.Combine(Directory.GetCurrentDirectory(), builder.GetSection(key: "AppConfiguration")["ResourcesPathFisical:Certificado"], sFoto);
                     break;
                 case "CONTRATO":
-                    path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\images\\contrato", sFoto);
+                    path = Path.Combine(Directory.GetCurrentDirectory(), builder.GetSection(key: "AppConfiguration")["ResourcesPathFisical:Contrato"], sFoto);
                     break;
                 case "DOCUMENTO":
-                    path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\images\\documento", sFoto);
+                    path = Path.Combine(Directory.GetCurrentDirectory(), builder.GetSection(key: "AppConfiguration")["ResourcesPathFisical:Documento"], sFoto);
                     break;
                 case "USUARIO":
-                    path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\images\\usuario", sFoto);
+                    path = Path.Combine(Directory.GetCurrentDirectory(), builder.GetSection(key: "AppConfiguration")["ResourcesPathFisical:Usuario"], sFoto);
                     break;
             }
 
@@ -62,21 +65,25 @@ namespace LabluzPro.Domain.Diversos
 
         public static string Download(string sFoto, string origem)
         {
+            var builder = new ConfigurationBuilder()
+                .SetBasePath(Directory.GetCurrentDirectory())
+                .AddJsonFile("appsettings.json").Build();
+
             string path = "";
 
             switch (origem)
             {
                 case "CERTIFICADO":
-                    path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\images\\certificado", sFoto);
+                    path = Path.Combine(Directory.GetCurrentDirectory(), builder.GetSection(key: "AppConfiguration")["ResourcesPathFisical:Certificado"], sFoto);
                     break;
                 case "CONTRATO":
-                    path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\images\\contrato", sFoto);
+                    path = Path.Combine(Directory.GetCurrentDirectory(), builder.GetSection(key: "AppConfiguration")["ResourcesPathFisical:Contrato"], sFoto);
                     break;
                 case "DOCUMENTO":
-                    path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\images\\documento", sFoto);
+                    path = Path.Combine(Directory.GetCurrentDirectory(), builder.GetSection(key: "AppConfiguration")["ResourcesPathFisical:Documento"], sFoto);
                     break;
                 case "USUARIO":
-                    path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\images\\usuario", sFoto);
+                    path = Path.Combine(Directory.GetCurrentDirectory(), builder.GetSection(key: "AppConfiguration")["ResourcesPathFisical:Usuario"], sFoto);
                     break;
             }
 
@@ -170,83 +177,16 @@ namespace LabluzPro.Domain.Diversos
             }
         }
 
-        public static string ReadSetting(string key)
-        {
-            string result = "";
-
-            try
-            {
-                result = ConfigurationManager.AppSettings[key].ToString();
-            }
-            catch (ConfigurationErrorsException)
-            {
-            }
-
-            return result;
-
-        }
-
-        public static string BodyEmail(int iTipo, string texto = "")
-        {
-            string body = "";
-
-            switch (iTipo)
-            {
-                case 1:
-                    body += "<table style='border - collapse:collapse; border - spacing:0; Margin - left:auto; Margin - right:auto; width: 600px; background - color:#ffffff;font-size:14px;table-layout:fixed'><tbody><tr><td style='padding:0;vertical-align:top;text-align:left'><div><div style='font-size:32px;line-height:32px'>&nbsp;</div></div>";
-                    body += "<table style='border - collapse:collapse; border - spacing:0; table - layout:fixed; width: 100 % '><tbody><tr><td style='padding: 0; vertical - align:top; padding - left:32px; padding - right:32px; word -break:break-word; word - wrap:break-word'><h1 style='font - style:normal; font - weight:700; Margin - bottom:18px; Margin - top:0; font - size:36px; line - height:44px; font - family:Ubuntu,sans - serif; color:#565656;text-align:center'><strong style='font-weight:bold'>Mudança de Senha</strong></h1>";
-                    body += "</td></tr></tbody></table><table style='border - collapse:collapse; border - spacing:0; table - layout:fixed; width: 100 % '><tbody><tr><td style='padding: 0; vertical - align:top; padding - left:32px; padding - right:32px; word -break:break-word; word - wrap:break-word'><div style='min - height:20px'>&nbsp;</div></td></tr></tbody></table><table style='border - collapse:collapse; border - spacing:0; table - layout:fixed; width: 100 % '><tbody><tr><td style='padding: 0; vertical - align:top; padding - left:32px; padding - right:32px; word -break:break-word; word - wrap:break-word'><p style='font - style:normal; font - weight:400; Margin - bottom:24px; Margin - top:0; line - height:24px; font - family:Ubuntu,sans - serif; color:#787778;font-size:16px'>Obrigado por participar desta emoção. Segue o link para mudança de sua senha.</p></td></tr></tbody></table><table style='border-collapse:collapse;border-spacing:0;table-layout:fixed;width:100%'><tbody><tr><td style='padding:0;vertical-align:top;padding-left:1px;padding-right:32px;word-break:break-word;word-wrap:break-word'><div><u></u><a style='border-radius:3px;display:inline-block;font-size:14px;font-weight:700;line-height:24px;padding:13px 35px 12px 35px;text-align:center;text-decoration:none!important;color:#fff;font-family:Ubuntu,sans-serif;background-color:#4169E1' href=\"{1}\" target='_blank'>Clique aqui</a><u></u></div></td></tr></tbody></table><table style='border-collapse:collapse;border-spacing:0;table-layout:fixed;width:100%'><tbody><tr><td style='padding:0;vertical-align:top;padding-left:1px;padding-right:32px;word-break:break-word;word-wrap:break-word'><div style='min-height:14px'>&nbsp;</div></td></tr></tbody></table><table style='border-collapse:collapse;border-spacing:0;table-layout:fixed;width:100%'><tbody><tr><td style='padding:0;vertical-align:top;padding-left:1px;padding-right:32px;word-break:break-word;word-wrap:break-word'><p style='font-style:normal;font-weight:400;Margin-bottom:0;Margin-top:0;line-height:24px;font-family:Ubuntu,sans-serif;color:#787778;font-size:16px'><em>Equipe </em>Society PRO agradece sua preferência.</p></td></tr></tbody></table><div style='font-size:32px;line-height:32px'>&nbsp;</div></td></tr></tbody></table>";
-
-                    break;
-                case 2:
-                    body += "<table style='border - collapse:collapse; border - spacing:0; Margin - left:auto; Margin - right:auto; width: 600px; background - color:#ffffff;font-size:14px;table-layout:fixed'><tbody><tr><td style='padding:0;vertical-align:top;text-align:left'><div><div style='font-size:32px;line-height:32px'>&nbsp;</div></div>";
-                    body += "<table style='border - collapse:collapse; border - spacing:0; table - layout:fixed; width: 100 % '><tbody><tr><td style='padding: 0; vertical - align:top; padding - left:32px; padding - right:32px; word -break:break-word; word - wrap:break-word'><h1 style='font - style:normal; font - weight:700; Margin - bottom:18px; Margin - top:0; font - size:36px; line - height:44px; font - family:Ubuntu,sans - serif; color:#565656;text-align:center'><strong style='font-weight:bold'>Confirmação de Conta</strong></h1>";
-                    body += "</td></tr></tbody></table><table style='border - collapse:collapse; border - spacing:0; table - layout:fixed; width: 100 % '><tbody><tr><td style='padding: 0; vertical - align:top; padding - left:32px; padding - right:32px; word -break:break-word; word - wrap:break-word'><div style='min - height:20px'>&nbsp;</div></td></tr></tbody></table><table style='border - collapse:collapse; border - spacing:0; table - layout:fixed; width: 100 % '><tbody><tr><td style='padding: 0; vertical - align:top; padding - left:32px; padding - right:32px; word -break:break-word; word - wrap:break-word'><p style='font - style:normal; font - weight:400; Margin - bottom:24px; Margin - top:0; line - height:24px; font - family:Ubuntu,sans - serif; color:#787778;font-size:16px'>Obrigado por participar desta emoção. Segue o link para confirmação de sua conta.</p></td></tr></tbody></table><table style='border-collapse:collapse;border-spacing:0;table-layout:fixed;width:100%'><tbody><tr><td style='padding:0;vertical-align:top;padding-left:1px;padding-right:32px;word-break:break-word;word-wrap:break-word'><div><u></u><a style='border-radius:3px;display:inline-block;font-size:14px;font-weight:700;line-height:24px;padding:13px 35px 12px 35px;text-align:center;text-decoration:none!important;color:#fff;font-family:Ubuntu,sans-serif;background-color:#4169E1' href=\"{1}\" target='_blank'>Clique aqui</a><u></u></div></td></tr></tbody></table><table style='border-collapse:collapse;border-spacing:0;table-layout:fixed;width:100%'><tbody><tr><td style='padding:0;vertical-align:top;padding-left:1px;padding-right:32px;word-break:break-word;word-wrap:break-word'><div style='min-height:14px'>&nbsp;</div></td></tr></tbody></table><table style='border-collapse:collapse;border-spacing:0;table-layout:fixed;width:100%'><tbody><tr><td style='padding:0;vertical-align:top;padding-left:1px;padding-right:32px;word-break:break-word;word-wrap:break-word'><p style='font-style:normal;font-weight:400;Margin-bottom:0;Margin-top:0;line-height:24px;font-family:Ubuntu,sans-serif;color:#787778;font-size:16px'><em>Equipe </em>Society PRO agradece sua preferência.</p></td></tr></tbody></table><div style='font-size:32px;line-height:32px'>&nbsp;</div></td></tr></tbody></table>";
-
-                    break;
-                case 3:
-                    body += "<table style='border - collapse:collapse; border - spacing:0; Margin - left:auto; Margin - right:auto; width: 600px; background - color:#ffffff;font-size:14px;table-layout:fixed'><tbody><tr><td style='padding:0;vertical-align:top;text-align:left'><div><div style='font-size:32px;line-height:32px'>&nbsp;</div></div>";
-                    body += "<table style='border - collapse:collapse; border - spacing:0; table - layout:fixed; width: 100 % '><tbody><tr><td style='padding: 0; vertical - align:top; padding - left:32px; padding - right:32px; word -break:break-word; word - wrap:break-word'><h1 style='font - style:normal; font - weight:700; Margin - bottom:18px; Margin - top:0; font - size:36px; line - height:44px; font - family:Ubuntu,sans - serif; color:#565656;text-align:center'><strong style='font-weight:bold'>Convite de Partida</strong></h1>";
-                    body += "</td></tr></tbody></table><table style='border - collapse:collapse; border - spacing:0; table - layout:fixed; width: 100 % '><tbody><tr><td style='padding: 0; vertical - align:top; padding - left:32px; padding - right:32px; word -break:break-word; word - wrap:break-word'><div style='min - height:20px'>&nbsp;</div></td></tr></tbody></table>" + texto + "<table style='border - collapse:collapse; border - spacing:0; table - layout:fixed; width: 100 % '><tbody><tr><td style='padding: 0; vertical - align:top; padding - left:32px; padding - right:32px; word -break:break-word; word - wrap:break-word'><p style='font - style:normal; font - weight:400; Margin - bottom:24px; Margin - top:0; line - height:24px; font - family:Ubuntu,sans - serif; color:#787778;font-size:16px'>Obrigado por participar desta emoção. Segue o link para confirmação da sua partida.</p></td></tr></tbody></table><table style='border-collapse:collapse;border-spacing:0;table-layout:fixed;width:100%'><tbody><tr><td style='padding:0;vertical-align:top;padding-left:1px;padding-right:32px;word-break:break-word;word-wrap:break-word'><div><u></u><a style='border-radius:3px;display:inline-block;font-size:14px;font-weight:700;line-height:24px;padding:13px 35px 12px 35px;text-align:center;text-decoration:none!important;color:#fff;font-family:Ubuntu,sans-serif;background-color:#4169E1' href=\"{1}\" target='_blank'>Aceitar Partida</a><u></u></div></td></tr></tbody></table><table style='border-collapse:collapse;border-spacing:0;table-layout:fixed;width:100%'><tbody><tr><td style='padding:0;vertical-align:top;padding-left:1px;padding-right:32px;word-break:break-word;word-wrap:break-word'><div style='min-height:14px'>&nbsp;</div></td></tr></tbody></table><table style='border-collapse:collapse;border-spacing:0;table-layout:fixed;width:100%'><tbody><tr><td style='padding:0;vertical-align:top;padding-left:1px;padding-right:32px;word-break:break-word;word-wrap:break-word'><p style='font-style:normal;font-weight:400;Margin-bottom:0;Margin-top:0;line-height:24px;font-family:Ubuntu,sans-serif;color:#787778;font-size:16px'><em>Equipe </em>Society PRO agradece sua preferência.</p></td></tr></tbody></table><div style='font-size:32px;line-height:32px'>&nbsp;</div></td></tr></tbody></table>";
-
-                    break;
-                case 4:
-                    body += "<table style='border - collapse:collapse; border - spacing:0; Margin - left:auto; Margin - right:auto; width: 600px; background - color:#ffffff;font-size:14px;table-layout:fixed'><tbody><tr><td style='padding:0;vertical-align:top;text-align:left'><div><div style='font-size:32px;line-height:32px'>&nbsp;</div></div>";
-                    body += "<table style='border - collapse:collapse; border - spacing:0; table - layout:fixed; width: 100 % '><tbody><tr><td style='padding: 0; vertical - align:top; padding - left:32px; padding - right:32px; word -break:break-word; word - wrap:break-word'><h1 style='font - style:normal; font - weight:700; Margin - bottom:18px; Margin - top:0; font - size:36px; line - height:44px; font - family:Ubuntu,sans - serif; color:#565656;text-align:center'><strong style='font-weight:bold'>Convite de Partida</strong></h1>";
-                    body += "</td></tr></tbody></table><table style='border - collapse:collapse; border - spacing:0; table - layout:fixed; width: 100 % '><tbody><tr><td style='padding: 0; vertical - align:top; padding - left:32px; padding - right:32px; word -break:break-word; word - wrap:break-word'><div style='min - height:20px'>&nbsp;</div></td></tr></tbody></table>" + texto + "<table style='border - collapse:collapse; border - spacing:0; table - layout:fixed; width: 100 % '><tbody><tr><td style='padding: 0; vertical - align:top; padding - left:32px; padding - right:32px; word -break:break-word; word - wrap:break-word'><p style='font - style:normal; font - weight:400; Margin - bottom:24px; Margin - top:0; line - height:24px; font - family:Ubuntu,sans - serif; color:#787778;font-size:16px'>Obrigado por participar desta emoção. Segue o link para confirmação da sua partida.</p></td></tr></tbody></table><table style='border-collapse:collapse;border-spacing:0;table-layout:fixed;width:100%'><tbody><tr><td style='padding:0;vertical-align:top;padding-left:1px;padding-right:32px;word-break:break-word;word-wrap:break-word'><div style='min-height:14px'>&nbsp;</div></td></tr></tbody></table><table style='border-collapse:collapse;border-spacing:0;table-layout:fixed;width:100%'><tbody><tr><td style='padding:0;vertical-align:top;padding-left:1px;padding-right:32px;word-break:break-word;word-wrap:break-word'><p style='font-style:normal;font-weight:400;Margin-bottom:0;Margin-top:0;line-height:24px;font-family:Ubuntu,sans-serif;color:#787778;font-size:16px'><em>Equipe </em>Society PRO agradece sua preferência.</p></td></tr></tbody></table><div style='font-size:32px;line-height:32px'>&nbsp;</div></td></tr></tbody></table>";
-
-                    break;
-                case 5:
-                    body += "<table style='border - collapse:collapse; border - spacing:0; Margin - left:auto; Margin - right:auto; width: 600px; background - color:#ffffff;font-size:14px;table-layout:fixed'><tbody><tr><td style='padding:0;vertical-align:top;text-align:left'><div><div style='font-size:32px;line-height:32px'>&nbsp;</div></div>";
-                    body += "<table style='border - collapse:collapse; border - spacing:0; table - layout:fixed; width: 100 % '><tbody><tr><td style='padding: 0; vertical - align:top; padding - left:32px; padding - right:32px; word -break:break-word; word - wrap:break-word'><h1 style='font - style:normal; font - weight:700; Margin - bottom:18px; Margin - top:0; font - size:36px; line - height:44px; font - family:Ubuntu,sans - serif; color:#565656;text-align:center'><strong style='font-weight:bold'>Lista de Relacionados</strong></h1>";
-                    body += "</td></tr></tbody></table><table style='border - collapse:collapse; border - spacing:0; table - layout:fixed; width: 100 % '><tbody><tr><td style='padding: 0; vertical - align:top; padding - left:32px; padding - right:32px; word -break:break-word; word - wrap:break-word'><div style='min - height:20px'>&nbsp;</div></td></tr></tbody></table>" + texto + "<table style='border - collapse:collapse; border - spacing:0; table - layout:fixed; width: 100 % '><tbody><tr><td style='padding: 0; vertical - align:top; padding - left:32px; padding - right:32px; word -break:break-word; word - wrap:break-word'><p style='font - style:normal; font - weight:400; Margin - bottom:24px; Margin - top:0; line - height:24px; font - family:Ubuntu,sans - serif; color:#787778;font-size:16px'>Obrigado por participar desta emoção. Segue em anexo a lista de relacionados.</p></td></tr></tbody></table><table style='border-collapse:collapse;border-spacing:0;table-layout:fixed;width:100%'><tbody><tr><td style='padding:0;vertical-align:top;padding-left:1px;padding-right:32px;word-break:break-word;word-wrap:break-word'><div style='min-height:14px'>&nbsp;</div></td></tr></tbody></table><table style='border-collapse:collapse;border-spacing:0;table-layout:fixed;width:100%'><tbody><tr><td style='padding:0;vertical-align:top;padding-left:1px;padding-right:32px;word-break:break-word;word-wrap:break-word'><p style='font-style:normal;font-weight:400;Margin-bottom:0;Margin-top:0;line-height:24px;font-family:Ubuntu,sans-serif;color:#787778;font-size:16px'><em>Equipe </em>Society PRO agradece sua preferência.</p></td></tr></tbody></table><div style='font-size:32px;line-height:32px'>&nbsp;</div></td></tr></tbody></table>";
-
-                    break;
-                case 6:
-                    body += "<table style='border - collapse:collapse; border - spacing:0; Margin - left:auto; Margin - right:auto; width: 600px; background - color:#ffffff;font-size:14px;table-layout:fixed'><tbody><tr><td style='padding:0;vertical-align:top;text-align:left'><div><div style='font-size:32px;line-height:32px'>&nbsp;</div></div>";
-                    body += "<table style='border - collapse:collapse; border - spacing:0; table - layout:fixed; width: 100 % '><tbody><tr><td style='padding: 0; vertical - align:top; padding - left:32px; padding - right:32px; word -break:break-word; word - wrap:break-word'><h1 style='font - style:normal; font - weight:700; Margin - bottom:18px; Margin - top:0; font - size:36px; line - height:44px; font - family:Ubuntu,sans - serif; color:#565656;text-align:center'><strong style='font-weight:bold'>Contato</strong></h1>";
-                    body += "</td></tr></tbody></table><table style='border - collapse:collapse; border - spacing:0; table - layout:fixed; width: 100 % '><tbody><tr><td style='padding: 0; vertical - align:top; padding - left:32px; padding - right:32px; word -break:break-word; word - wrap:break-word'><div style='min - height:20px'>&nbsp;</div></td></tr></tbody></table>" + texto + "<table style='border - collapse:collapse; border - spacing:0; table - layout:fixed; width: 100 % '><tbody><tr><td style='padding: 0; vertical - align:top; padding - left:32px; padding - right:32px; word -break:break-word; word - wrap:break-word'><p style='font - style:normal; font - weight:400; Margin - bottom:24px; Margin - top:0; line - height:24px; font - family:Ubuntu,sans - serif; color:#787778;font-size:16px'>Obrigado por participar desta emoção. Segue em anexo a lista de relacionados.</p></td></tr></tbody></table><table style='border-collapse:collapse;border-spacing:0;table-layout:fixed;width:100%'><tbody><tr><td style='padding:0;vertical-align:top;padding-left:1px;padding-right:32px;word-break:break-word;word-wrap:break-word'><div style='min-height:14px'>&nbsp;</div></td></tr></tbody></table><table style='border-collapse:collapse;border-spacing:0;table-layout:fixed;width:100%'><tbody><tr><td style='padding:0;vertical-align:top;padding-left:1px;padding-right:32px;word-break:break-word;word-wrap:break-word'><p style='font-style:normal;font-weight:400;Margin-bottom:0;Margin-top:0;line-height:24px;font-family:Ubuntu,sans-serif;color:#787778;font-size:16px'><em>Equipe </em>Society PRO agradece sua preferência.</p></td></tr></tbody></table><div style='font-size:32px;line-height:32px'>&nbsp;</div></td></tr></tbody></table>";
-
-                    break;
-                default:
-                    break;
-            }
-
-            return body;
-        }
-
         public static bool SendEmail(string _para, string _subject, string _body, List<string> _anexos)
         {
             try
             {
-
                 var builder = new ConfigurationBuilder()
-    .SetBasePath(Directory.GetCurrentDirectory())
-    .AddJsonFile("appsettings.json").Build();
-
+                    .SetBasePath(Directory.GetCurrentDirectory())
+                    .AddJsonFile("appsettings.json").Build();
 
                 AlternateView view = AlternateView.CreateAlternateViewFromString(_body, null, MediaTypeNames.Text.Html);
-                LinkedResource resource = new LinkedResource(Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\images\\logo.png"))
+                LinkedResource resource = new LinkedResource(Path.Combine(Directory.GetCurrentDirectory(), builder.GetSection(key: "AppConfiguration")["ResourcesPathFisical:Logo"]))
                 {
                     ContentId = "Imagem1"
                 };

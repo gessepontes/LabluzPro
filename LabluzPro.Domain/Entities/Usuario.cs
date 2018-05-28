@@ -73,6 +73,8 @@ namespace LabluzPro.Domain.Entities
         [Display(Name = "Ativo")]
         public bool bAtivo { get; set; }
 
+        public string SECURITYSTAMP { get; set; }
+
         public DateTime dCadastro { get; set; }
         public int iCodUsuarioMovimentacao { get; set; }
 

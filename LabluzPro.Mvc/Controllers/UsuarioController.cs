@@ -27,8 +27,6 @@ namespace LabluzPro.Mvc.Controllers
             _usuarioPaginaRepository = usuarioPaginaRepository;
         }
 
-
-
         public IActionResult SendEmail()
         {
             foreach (var item in _usuarioRepository.GetAll())

@@ -23,6 +23,41 @@ namespace LabluzPro.Mvc.Controllers
             return View();
         }
 
+        public IActionResult Forgot()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult Forgot(string sEmail)
+        {
+            _usuarioRepository.Forgot(sEmail);
+            _flashMessage.Confirmation("Foi enviado um email para mudança de senha!");
+            return View();
+        }
+
+        public ActionResult ResetPassword(string Token, string Email)
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public ActionResult ResetPasswordConfirm([Bind("sEmail,SECURITYSTAMP,sSenha")] Usuario _usuario)
+        {
+            var userList = _usuarioRepository.GetByIdTokenSenha(_usuario);
+
+            if (userList != null)
+            {
+                _flashMessage.Confirmation("Operação realizada com sucesso!");
+                return RedirectToAction("Index", "Login");
+            }
+            else
+            {
+                _flashMessage.Danger("Dados de validação inválida, contate o administrador do sistema!");
+                return RedirectToAction("Index", "Login");
+            }
+        }
+
         public IActionResult Logout()
         {
             HttpContext.Session.SetComplexData("UserData", new Usuario());

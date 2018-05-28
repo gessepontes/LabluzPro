@@ -8,6 +8,8 @@ namespace LabluzPro.Domain.Interfaces
         void UpdateUser(Usuario obj);
         Usuario GetByIdUsuarioPerfil(int? id);
         Usuario Login(Usuario obj);
+        Usuario GetByIdTokenSenha(Usuario obj);
         void SendEmail(string sEmail);
+        void Forgot(string sEmail);
     }
 }
