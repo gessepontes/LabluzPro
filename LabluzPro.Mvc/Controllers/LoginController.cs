@@ -33,29 +33,45 @@ namespace LabluzPro.Mvc.Controllers
         {
             _usuarioRepository.Forgot(sEmail);
             _flashMessage.Confirmation("Foi enviado um email para mudança de senha!");
-            return View();
+            return RedirectToAction("Index", "Login");
         }
 
         public ActionResult ResetPassword(string Token, string Email)
         {
-            return View();
-        }
+            ResetPassword reset = new ResetPassword
+            {
+                sEmail = Email,
+                sToken = Token
+            };
 
-        [HttpPost]
-        public ActionResult ResetPasswordConfirm([Bind("sEmail,SECURITYSTAMP,sSenha")] Usuario _usuario)
-        {
+
+            Usuario _usuario = new Usuario
+            {
+                sEmail = Email,
+                SECURITYSTAMP = Token
+            };
+
             var userList = _usuarioRepository.GetByIdTokenSenha(_usuario);
 
             if (userList != null)
             {
-                _flashMessage.Confirmation("Operação realizada com sucesso!");
-                return RedirectToAction("Index", "Login");
+                return View(reset);
             }
             else
             {
                 _flashMessage.Danger("Dados de validação inválida, contate o administrador do sistema!");
                 return RedirectToAction("Index", "Login");
             }
+
+        }
+
+        [HttpPost]
+        public ActionResult ResetPasswordConfirm([Bind("sToken,sSenha,sConfirmaSenha")] ResetPassword _reset)
+        {
+
+            _usuarioRepository.UpdateSenha(_reset.sToken,_reset.sSenha);
+            _flashMessage.Confirmation("Operação realizada com sucesso!");
+            return RedirectToAction("Index", "Login");
         }
 
         public IActionResult Logout()

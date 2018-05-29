@@ -64,6 +64,13 @@ namespace LabluzPro.Data.Repositories
             conn.Execute(sql, new { obj.sNome, obj.sEmail, obj.sSenha, obj.bAtivo, obj.sImagem, obj.iCodUsuarioMovimentacao, obj.dCadastro, obj.sTelefone, obj.ID });
         }
 
+        public void UpdateSenha(string SECURITYSTAMP, string sSenha)
+        {
+            sSenha = Diverso.GenerateMD5(sSenha);
+
+            conn.Execute("UPDATE Usuario SET sSenha=@sSenha WHERE SECURITYSTAMP=@SECURITYSTAMP; ", new {sSenha, SECURITYSTAMP });
+        }
+
         public Usuario GetByIdUsuarioPerfil(int? id)
         {
             Usuario p = GetById(id);
@@ -101,8 +108,7 @@ namespace LabluzPro.Data.Repositories
 
         public void SendEmail(string sEmail)
         {
-            string _body = "";
-            string strBody = "";
+            string _body, strBody, conteudo;
             string sTitulo = "";
             int Count = 0;
 
@@ -110,25 +116,31 @@ namespace LabluzPro.Data.Repositories
             ContratoRepository contratoRepository = new ContratoRepository();
             DocumentoRepository documentoRepository = new DocumentoRepository();
 
-            _body = "<tr style='=font-weight:bold;' align=center><td>AVISO DE VENCIMENTO</td></tr>";
+            conteudo = "";
 
             foreach (Certificado item in certificadoRepository.GetAllVencidos())
             {
-                _body += "<tr><td font-weight:bold'><b>Certificado: </b>" + item.sNome + "</td></tr>";
+                conteudo += "<tr><td font-weight:bold'><b>Certificado: </b>" + item.sNome + "</td></tr>";
                 Count = Count + 1;
             }
 
             foreach (Contrato item in contratoRepository.GetAllVencidos())
             {
-                _body += "<tr><td font-weight:bold'><b>Contrato: </b>" + item.sNome + "</td></tr>";
+                conteudo += "<tr><td font-weight:bold'><b>Contrato: </b>" + item.sNome + "</td></tr>";
                 Count = Count + 1;
             }
 
             foreach (Documento item in documentoRepository.GetAllVencidos())
             {
-                _body += "<tr><td font-weight:bold'><b>Documeto: </b>" + item.sNome + "</td></tr>";
+                conteudo += "<tr><td font-weight:bold'><b>Documeto: </b>" + item.sNome + "</td></tr>";
                 Count = Count + 1;
             }
+
+
+            _body = "<table style='border - collapse:collapse; border - spacing:0; Margin - left:auto; Margin - right:auto; width: 600px; background - color:#ffffff;font-size:14px;table-layout:fixed'><tbody><tr><td style='padding:0;vertical-align:top;text-align:left'><div><div style='font-size:32px;line-height:32px'>&nbsp;</div></div>";
+            _body += "<table style='border - collapse:collapse; border - spacing:0; table - layout:fixed; width: 100 % '><tbody><tr><td style='padding: 0; vertical - align:top; padding - left:32px; padding - right:32px; word -break:break-word; word - wrap:break-word'><h1 style='font - style:normal; font - weight:700; Margin - bottom:18px; Margin - top:0; font - size:36px; line - height:44px; font - family:Ubuntu,sans - serif; color:#565656;text-align:center'><strong style='font-weight:bold'>Aviso de Vencimento</strong></h1>";
+            _body += "</td></tr></tbody></table><table style='border - collapse:collapse; border - spacing:0; table - layout:fixed; width: 100 % '><tbody><tr><td style='padding: 0; vertical - align:top; padding - left:32px; padding - right:32px; word -break:break-word; word - wrap:break-word'><div style='min - height:20px'>&nbsp;</div>" + conteudo + "</td></tr></tbody></table><table style='border-collapse:collapse;border-spacing:0;table-layout:fixed;width:100%'><tbody><tr><td style='padding:0;vertical-align:top;padding-left:1px;padding-right:32px;word-break:break-word;word-wrap:break-word'><div><u></u></div></td></tr></tbody></table><table style='border-collapse:collapse;border-spacing:0;table-layout:fixed;width:100%'><tbody><tr><td style='padding:0;vertical-align:top;padding-left:1px;padding-right:32px;word-break:break-word;word-wrap:break-word'><div style='min-height:14px'>&nbsp;</div></td></tr></tbody></table><table style='border-collapse:collapse;border-spacing:0;table-layout:fixed;width:100%'><tbody><tr><td style='padding:0;vertical-align:top;padding-left:1px;padding-right:32px;word-break:break-word;word-wrap:break-word'><p style='font-style:normal;font-weight:400;Margin-bottom:0;Margin-top:0;line-height:24px;font-family:Ubuntu,sans-serif;color:#787778;font-size:16px'><em>Equipe </em>LabLuz agradece sua preferência.</p></td></tr></tbody></table><div style='font-size:32px;line-height:32px'>&nbsp;</div></td></tr></tbody></table>";
+
 
             strBody = "";
             strBody = strBody + "<html>";
@@ -164,15 +176,11 @@ namespace LabluzPro.Data.Repositories
             string _body = "";
             string strBody = "";
             string sTitulo = "";
-            string sToken = "";
+            string sToken = Guid.NewGuid().ToString("D");
 
             Usuario p = conn.Query<Usuario>("SELECT TOP(1) * FROM Usuario WHERE sEmail =@sEmail ", new { sEmail }).FirstOrDefault();
 
-            sToken = Guid.NewGuid().ToString("D");
-
-            p.SECURITYSTAMP = sToken;
-
-            Update(p);
+            conn.Execute("UPDATE Usuario SET SECURITYSTAMP=@SECURITYSTAMP  WHERE ID = @ID;", new { p.ID, SECURITYSTAMP = sToken });
 
             var builder = new ConfigurationBuilder()
     .SetBasePath(Directory.GetCurrentDirectory())
@@ -182,7 +190,7 @@ namespace LabluzPro.Data.Repositories
 
             _body += "<table style='border - collapse:collapse; border - spacing:0; Margin - left:auto; Margin - right:auto; width: 600px; background - color:#ffffff;font-size:14px;table-layout:fixed'><tbody><tr><td style='padding:0;vertical-align:top;text-align:left'><div><div style='font-size:32px;line-height:32px'>&nbsp;</div></div>";
             _body += "<table style='border - collapse:collapse; border - spacing:0; table - layout:fixed; width: 100 % '><tbody><tr><td style='padding: 0; vertical - align:top; padding - left:32px; padding - right:32px; word -break:break-word; word - wrap:break-word'><h1 style='font - style:normal; font - weight:700; Margin - bottom:18px; Margin - top:0; font - size:36px; line - height:44px; font - family:Ubuntu,sans - serif; color:#565656;text-align:center'><strong style='font-weight:bold'>Mudança de Senha</strong></h1>";
-            _body += "</td></tr></tbody></table><table style='border - collapse:collapse; border - spacing:0; table - layout:fixed; width: 100 % '><tbody><tr><td style='padding: 0; vertical - align:top; padding - left:32px; padding - right:32px; word -break:break-word; word - wrap:break-word'><div style='min - height:20px'>&nbsp;</div></td></tr></tbody></table><table style='border - collapse:collapse; border - spacing:0; table - layout:fixed; width: 100 % '><tbody><tr><td style='padding: 0; vertical - align:top; padding - left:32px; padding - right:32px; word -break:break-word; word - wrap:break-word'><p style='font - style:normal; font - weight:400; Margin - bottom:24px; Margin - top:0; line - height:24px; font - family:Ubuntu,sans - serif; color:#787778;font-size:16px'>Segue o link para mudança de sua senha.</p></td></tr></tbody></table><table style='border-collapse:collapse;border-spacing:0;table-layout:fixed;width:100%'><tbody><tr><td style='padding:0;vertical-align:top;padding-left:1px;padding-right:32px;word-break:break-word;word-wrap:break-word'><div><u></u><a style='border-radius:3px;display:inline-block;font-size:14px;font-weight:700;line-height:24px;padding:13px 35px 12px 35px;text-align:center;text-decoration:none!important;color:#fff;font-family:Ubuntu,sans-serif;background-color:#4169E1' href=\"{1}\" target='_blank'>Clique aqui</a><u></u></div></td></tr></tbody></table><table style='border-collapse:collapse;border-spacing:0;table-layout:fixed;width:100%'><tbody><tr><td style='padding:0;vertical-align:top;padding-left:1px;padding-right:32px;word-break:break-word;word-wrap:break-word'><div style='min-height:14px'>&nbsp;</div></td></tr></tbody></table><table style='border-collapse:collapse;border-spacing:0;table-layout:fixed;width:100%'><tbody><tr><td style='padding:0;vertical-align:top;padding-left:1px;padding-right:32px;word-break:break-word;word-wrap:break-word'><p style='font-style:normal;font-weight:400;Margin-bottom:0;Margin-top:0;line-height:24px;font-family:Ubuntu,sans-serif;color:#787778;font-size:16px'><em>Equipe </em>LabLuz agradece sua preferência.</p></td></tr></tbody></table><div style='font-size:32px;line-height:32px'>&nbsp;</div></td></tr></tbody></table>";
+            _body += "</td></tr></tbody></table><table style='border - collapse:collapse; border - spacing:0; table - layout:fixed; width: 100 % '><tbody><tr><td style='padding: 0; vertical - align:top; padding - left:32px; padding - right:32px; word -break:break-word; word - wrap:break-word'><div style='min - height:20px'>&nbsp;</div></td></tr></tbody></table><table style='border - collapse:collapse; border - spacing:0; table - layout:fixed; width: 100 % '><tbody><tr><td style='padding: 0; vertical - align:top; padding - left:32px; padding - right:32px; word -break:break-word; word - wrap:break-word'><p style='font - style:normal; font - weight:400; Margin - bottom:24px; Margin - top:0; line - height:24px; font - family:Ubuntu,sans - serif; color:#787778;font-size:16px'>Segue o link para mudança de sua senha.</p></td></tr></tbody></table><table style='border-collapse:collapse;border-spacing:0;table-layout:fixed;width:100%'><tbody><tr><td style='padding:0;vertical-align:top;padding-left:1px;padding-right:32px;word-break:break-word;word-wrap:break-word'><div><u></u><a style='border-radius:3px;display:inline-block;font-size:14px;font-weight:700;line-height:24px;padding:13px 35px 12px 35px;text-align:center;text-decoration:none!important;color:#fff;font-family:Ubuntu,sans-serif;background-color:#a42532' href=\"{1}\" target='_blank'>Clique aqui</a><u></u></div></td></tr></tbody></table><table style='border-collapse:collapse;border-spacing:0;table-layout:fixed;width:100%'><tbody><tr><td style='padding:0;vertical-align:top;padding-left:1px;padding-right:32px;word-break:break-word;word-wrap:break-word'><div style='min-height:14px'>&nbsp;</div></td></tr></tbody></table><table style='border-collapse:collapse;border-spacing:0;table-layout:fixed;width:100%'><tbody><tr><td style='padding:0;vertical-align:top;padding-left:1px;padding-right:32px;word-break:break-word;word-wrap:break-word'><p style='font-style:normal;font-weight:400;Margin-bottom:0;Margin-top:0;line-height:24px;font-family:Ubuntu,sans-serif;color:#787778;font-size:16px'><em>Equipe </em>LabLuz agradece sua preferência.</p></td></tr></tbody></table><div style='font-size:32px;line-height:32px'>&nbsp;</div></td></tr></tbody></table>";
 
             strBody = "";
             strBody = strBody + "<html>";
@@ -197,7 +205,7 @@ namespace LabluzPro.Data.Repositories
             strBody = strBody + "<tr align=center><td colspan=2></td></tr>";
 
             strBody = strBody + "<tr><td font-weight:bold'><p><p></td></tr> ";
-            strBody = strBody + string.Format(_body, p.sNome, sSite + "\\Login\\ResetPassword?Token=" + sToken + "&Email=" + p.sEmail);
+            strBody = strBody + string.Format(_body, p.sNome, sSite + @"Login/ResetPassword?Token=" + sToken + "&Email=" + p.sEmail);
             strBody = strBody + "</table> ";
             strBody = strBody + "<br><br>";
             strBody = strBody + "Esta é uma  mensagem automática enviada pelo sistema. Não precisa responder.";
